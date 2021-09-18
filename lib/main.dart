@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -22,6 +23,8 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatelessWidget {
   final myController = TextEditingController();
   late List<TextInputFormatter>? inputFormatters;
+  late int height;
+  late int weight;
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +51,7 @@ class MyHomePage extends StatelessWidget {
               controller: myController,
               onChanged: (text) {
                 // TODO: ここで取得したheightを使う
-                print("$text");
+                height = text as int;
               },
             ),
             TextField(
@@ -60,9 +63,9 @@ class MyHomePage extends StatelessWidget {
                 hintText: '～kg',
                 labelText: '体重',
               ),
-              onChanged: (weight) {
+              onChanged: (text1) {
                 // TODO: ここで取得したweightを使う
-                print("体重$weight");
+                weight = text1 as int;
               },
             ),
             TextField(
