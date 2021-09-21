@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -20,11 +22,33 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatelessWidget {
-  final myController = TextEditingController();
+class MyHomePage extends StatefulWidget {
+  @override
+  _MyHomePage createState() => _MyHomePage();
+}
+
+class _MyHomePage extends State<MyHomePage> {
+  final heightController = TextEditingController();
+  final weightController = TextEditingController();
   late List<TextInputFormatter>? inputFormatters;
-  late int height;
-  late int weight;
+  late double height;
+  late double weight;
+
+  @override
+  void initState() {
+    super.initState();
+    //myController.addListener(_Value);
+  }
+
+  // void _Value() {
+  //   print("入力状況: ${myController.text}");
+  // }
+
+  // void _handleText(String e) {
+  //   setState(() {
+  //     height = e;
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -48,11 +72,7 @@ class MyHomePage extends StatelessWidget {
                 hintText: '～cm',
                 labelText: '身長',
               ),
-              controller: myController,
-              onChanged: (text) {
-                // TODO: ここで取得したheightを使う
-                height = text as int;
-              },
+              controller: heightController,
             ),
             TextField(
               keyboardType: TextInputType.number,
@@ -63,10 +83,7 @@ class MyHomePage extends StatelessWidget {
                 hintText: '～kg',
                 labelText: '体重',
               ),
-              onChanged: (text1) {
-                // TODO: ここで取得したweightを使う
-                weight = text1 as int;
-              },
+              controller: weightController,
             ),
             TextField(
               decoration: const InputDecoration(
@@ -87,6 +104,30 @@ class MyHomePage extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  void showBmiDialog(double height, double weight) {
+    var bmi = (weight / pow(height, 2) * 10000).toStringAsFixed(2);
+    showDialog(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          title: Text("計算結果"),
+          content: Text("BMI値：$bmi"),
+          actions: <Widget>[
+            // ボタン領域
+            FlatButton(
+              child: Text("戻る"),
+              onPressed: () => Navigator.pop(context),
+            ),
+            FlatButton(
+              child: Text("次へ"),
+              onPressed: () => Navigator.pop(context),
+            ),
+          ],
+        );
+      },
     );
   }
 }
