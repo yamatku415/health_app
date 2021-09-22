@@ -4,6 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'line_graph.dart';
+
 void main() {
   runApp(MyApp());
 }
@@ -99,7 +101,23 @@ class _MyHomePage extends State<MyHomePage> {
                   child: Text('決定'),
                   onPressed: () {
                     //todo フォーカスするためのコード
+                    height = double.parse(heightController.text);
+                    weight = double.parse(weightController.text);
+                    showBmiDialog(height, weight);
                   }),
+            ),
+            TextButton(
+              child: Text('次へ'),
+              onPressed: () {
+                // 押したら反応するコードを書く
+                // 画面遷移のコード
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => LineGraph(),
+                  ),
+                );
+              },
             ),
           ],
         ),
