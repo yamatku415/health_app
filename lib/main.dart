@@ -112,11 +112,10 @@ class _MyHomePage extends State<MyHomePage> {
                 // 押したら反応するコードを書く
                 // 画面遷移のコード
                 Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => LineGraph(),
-                  ),
-                );
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => GraphPage(),
+                    ));
               },
             ),
           ],

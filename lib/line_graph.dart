@@ -27,6 +27,15 @@ class GraphPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leading: FloatingActionButton(
+          child: Text('戻る'),
+          onPressed: () {
+            // 1つ前に戻る
+            Navigator.pop(context);
+          },
+        ),
+      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -46,6 +55,7 @@ class GraphPage extends StatelessWidget {
   }
 
 //WeightDataのリストを作成。好きな日付と体重入れよう
+  //z ここをmain.dartから引っ張ってきた数字を代入して表示
   final weightList = <WeightData>[
     WeightData(DateTime(2020, 10, 2), 50),
     WeightData(DateTime(2020, 10, 3), 53),
