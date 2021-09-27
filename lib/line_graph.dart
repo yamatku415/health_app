@@ -8,9 +8,7 @@ void main() {
 class LineGraph extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: GraphPage(),
-    );
+    return MaterialApp();
   }
 }
 
@@ -40,12 +38,14 @@ class GraphPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('折れ線グラフだお'),
+            Text('体重グラフ'),
             Container(
               height: 500,
               //グラフ表示部分
               child: charts.TimeSeriesChart(
-                _createWeightData(weightList),
+                _createWeightData(
+                  weightList,
+                ),
               ),
             ),
           ],
@@ -57,9 +57,12 @@ class GraphPage extends StatelessWidget {
 //WeightDataのリストを作成。好きな日付と体重入れよう
   //z ここをmain.dartから引っ張ってきた数字を代入して表示
   final weightList = <WeightData>[
-    WeightData(DateTime(2020, 10, 2), 50),
-    WeightData(DateTime(2020, 10, 3), 53),
-    WeightData(DateTime(2020, 10, 4), 40)
+    WeightData(DateTime(2020, 10, 2), 80),
+    WeightData(DateTime(2020, 10, 3), 77),
+    WeightData(DateTime(2020, 10, 4), 73),
+    WeightData(DateTime(2020, 10, 5), 69),
+    WeightData(DateTime(2020, 10, 6), 66),
+    WeightData(DateTime(2020, 10, 7), 65),
   ];
 
 //上のリストからグラフに表示させるデータを生成

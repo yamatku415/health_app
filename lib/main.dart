@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -35,7 +33,7 @@ class _MyHomePage extends State<MyHomePage> {
   late List<TextInputFormatter>? inputFormatters;
   late double height;
   late double weight;
-
+  var showBmiDialog;
   @override
   void initState() {
     super.initState();
@@ -87,14 +85,6 @@ class _MyHomePage extends State<MyHomePage> {
               ),
               controller: weightController,
             ),
-            TextField(
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                icon: Icon(Icons.create),
-                hintText: '～kg',
-                labelText: '目標体重',
-              ),
-            ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: FloatingActionButton(
@@ -103,11 +93,18 @@ class _MyHomePage extends State<MyHomePage> {
                     //todo フォーカスするためのコード
                     height = double.parse(heightController.text);
                     weight = double.parse(weightController.text);
-                    showBmiDialog(height, weight);
+                    showBmiDialog =
+                        (weight - (weight * 0.02 * 6)).toStringAsFixed(1);
                   }),
             ),
+            Container(
+              width: 200,
+              // 縦幅
+              height: 50,
+              child: Text(showBmiDialog),
+            ),
             TextButton(
-              child: Text('次へ'),
+              child: Text('グラフへ'),
               onPressed: () {
                 // 押したら反応するコードを書く
                 // 画面遷移のコード
@@ -121,30 +118,6 @@ class _MyHomePage extends State<MyHomePage> {
           ],
         ),
       ),
-    );
-  }
-
-  void showBmiDialog(double height, double weight) {
-    var bmi = (weight / pow(height, 2) * 10000).toStringAsFixed(2);
-    showDialog(
-      context: context,
-      builder: (_) {
-        return AlertDialog(
-          title: Text("計算結果"),
-          content: Text("BMI値：$bmi"),
-          actions: <Widget>[
-            // ボタン領域
-            FlatButton(
-              child: Text("戻る"),
-              onPressed: () => Navigator.pop(context),
-            ),
-            FlatButton(
-              child: Text("次へ"),
-              onPressed: () => Navigator.pop(context),
-            ),
-          ],
-        );
-      },
     );
   }
 }
