@@ -33,7 +33,8 @@ class _MyHomePage extends State<MyHomePage> {
   late List<TextInputFormatter>? inputFormatters;
   late double height;
   late double weight;
-  var showBmiDialog;
+  late double ib;
+
   @override
   void initState() {
     super.initState();
@@ -93,16 +94,13 @@ class _MyHomePage extends State<MyHomePage> {
                     //todo フォーカスするためのコード
                     height = double.parse(heightController.text);
                     weight = double.parse(weightController.text);
-                    showBmiDialog =
-                        (weight - (weight * 0.02 * 6)).toStringAsFixed(1);
                   }),
             ),
-            Container(
-              width: 200,
-              // 縦幅
-              height: 50,
-              child: Text(showBmiDialog),
-            ),
+            Column(children: [
+              Text("貴様の目標体重は"),
+              Text((weight - (weight * 0.02 * 6)).toStringAsFixed(1)),
+              Text("kg!!!"),
+            ]),
             TextButton(
               child: Text('グラフへ'),
               onPressed: () {
