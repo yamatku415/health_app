@@ -30,10 +30,12 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePage extends State<MyHomePage> {
   final heightController = TextEditingController();
   final weightController = TextEditingController();
+  final todayweightController = TextEditingController();
   late List<TextInputFormatter>? inputFormatters;
   late double height;
   late double weight;
-  late double ib;
+  late double todayweight;
+  var ideal;
 
   @override
   void initState() {
@@ -94,13 +96,30 @@ class _MyHomePage extends State<MyHomePage> {
                     //todo フォーカスするためのコード
                     height = double.parse(heightController.text);
                     weight = double.parse(weightController.text);
+                    ideal = (weight - (weight * 0.02 * 6)).toStringAsFixed(1);
+                    print(ideal);
                   }),
             ),
-            Column(children: [
-              Text("貴様の目標体重は"),
-              Text((weight - (weight * 0.02 * 6)).toStringAsFixed(1)),
-              Text("kg!!!"),
-            ]),
+            TextField(
+              keyboardType: TextInputType.number,
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                icon: Icon(Icons.create),
+                hintText: '～kg',
+                labelText: '今日の体重',
+              ),
+              controller: todayweightController,
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: FloatingActionButton(
+                  child: Text('目標決定'),
+                  onPressed: () {
+                    //todo フォーカスするためのコード
+                    todayweight = double.parse(todayweightController.text);
+                  }),
+            ),
             TextButton(
               child: Text('グラフへ'),
               onPressed: () {
@@ -109,7 +128,12 @@ class _MyHomePage extends State<MyHomePage> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => GraphPage(),
+                      builder: (context) => GraphPage(
+                        height,
+                        weight,
+                        ideal,
+                        todayweight,
+                      ),
                     ));
               },
             ),

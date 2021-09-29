@@ -22,6 +22,8 @@ class WeightData {
 
 ///表示するページ
 class GraphPage extends StatelessWidget {
+  GraphPage(double height, double weight, ideal, double todayweight);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
