@@ -14,16 +14,14 @@ class LineGraph extends StatelessWidget {
 
 ///日付と体重を持つクラスを作成
 class WeightData {
+  GraphPage graphPage = GraphPage as GraphPage;
+  late double weight;
   final DateTime date;
-  final double weight;
-
   WeightData(this.date, this.weight);
 }
 
 ///表示するページ
 class GraphPage extends StatelessWidget {
-  GraphPage(double height, double weight, ideal, double todayweight);
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

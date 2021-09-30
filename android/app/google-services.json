@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "991895316739",
+    "project_id": "weightrecord-1e1be",
+    "storage_bucket": "weightrecord-1e1be.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:991895316739:android:6ccc0d07ffa354490e6136",
+        "android_client_info": {
+          "package_name": "com.example.health_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "991895316739-qod8p54lh036a1i8eajnv330iu8s4usi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAh1HiOQqfsA-ZDdwl_Kp-jHrxqiI-6giQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "991895316739-qod8p54lh036a1i8eajnv330iu8s4usi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
