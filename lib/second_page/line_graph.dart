@@ -1,7 +1,6 @@
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
-import 'package:health_app/weight_data.dart';
-import 'package:health_app/wight_data.dart';
+import 'package:health_app/second_page/weight_data.dart';
 
 class GraphPage extends StatefulWidget {
   GraphPage();

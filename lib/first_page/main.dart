@@ -1,47 +1,45 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:health_app/first_page/todayweight_.dart';
+import 'package:health_app/third_page/weight_list.dart';
+import 'package:provider/provider.dart';
 
-import 'line_graph.dart';
+import '../second_page/line_graph.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.green,
+    return ChangeNotifierProvider<WeightModel>(
+      create: (_) => WeightModel()..todayWeightList(),
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          primarySwatch: Colors.green,
+        ),
+        home: MyHomePage(),
       ),
-      home: MyHomePage(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  @override
-  _MyHomePage createState() => _MyHomePage();
-}
-
-class _MyHomePage extends State<MyHomePage> {
+class MyHomePage extends StatelessWidget {
   final heightController = TextEditingController();
   final weightController = TextEditingController();
-  final todayweightController = TextEditingController();
+  final todayWeightController = TextEditingController();
   late List<TextInputFormatter>? inputFormatters;
-  late double height;
-  late double weight;
-  late double todayweight;
+  late double nowHeight;
+  late double nowWeight;
   var ideal;
-
-  @override
-  void initState() {
-    super.initState();
-    //myController.addListener(_Value);
-  }
 
   // void _Value() {
   //   print("入力状況: ${myController.text}");
@@ -94,30 +92,23 @@ class _MyHomePage extends State<MyHomePage> {
                   child: Text('決定'),
                   onPressed: () {
                     //todo フォーカスするためのコード
-                    height = double.parse(heightController.text);
-                    weight = double.parse(weightController.text);
-                    ideal = (weight - (weight * 0.02 * 6)).toStringAsFixed(1);
+                    nowHeight = double.parse(heightController.text);
+                    nowWeight = double.parse(weightController.text);
+                    ideal =
+                        (nowWeight - (nowWeight * 0.02 * 6)).toStringAsFixed(1);
                     print(ideal);
                   }),
             ),
-            TextField(
-              keyboardType: TextInputType.number,
-              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                icon: Icon(Icons.create),
-                hintText: '～kg',
-                labelText: '今日の体重',
-              ),
-              controller: todayweightController,
-            ),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: FloatingActionButton(
-                  child: Text('目標決定'),
+              child: TextButton(
+                  child: Text('体重リストへ'),
                   onPressed: () {
-                    //todo フォーカスするためのコード
-                    todayweight = double.parse(todayweightController.text);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => WeightList(),
+                        ));
                   }),
             ),
             TextButton(
