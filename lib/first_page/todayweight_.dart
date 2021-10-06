@@ -24,3 +24,4 @@ class WeightModel extends ChangeNotifier {
     });
   }
 }
+//firestore紐づけているページ

@@ -6,7 +6,7 @@ import 'package:health_app/first_page/todayweight_.dart';
 import 'package:health_app/third_page/weight_list.dart';
 import 'package:provider/provider.dart';
 
-import '../second_page/line_graph.dart';
+import 'second_page/line_graph.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,24 +32,20 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatelessWidget {
+class MyHomePage extends StatefulWidget {
+  @override
+  _MyHomePage createState() => _MyHomePage();
+}
+
+class _MyHomePage extends State<MyHomePage> {
   final heightController = TextEditingController();
   final weightController = TextEditingController();
-  final todayWeightController = TextEditingController();
+  final todayweightController = TextEditingController();
   late List<TextInputFormatter>? inputFormatters;
   late double nowHeight;
   late double nowWeight;
+  late double todayweight;
   var ideal;
-
-  // void _Value() {
-  //   print("入力状況: ${myController.text}");
-  // }
-
-  // void _handleText(String e) {
-  //   setState(() {
-  //     height = e;
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {
