@@ -1,7 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:health_app/second_page/weight_data.dart';
-import 'package:health_app/third_page/weight_data_controller.dart';
-import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
 class WeightListPage extends StatefulWidget {
   @override
@@ -9,6 +8,9 @@ class WeightListPage extends StatefulWidget {
 }
 
 class _WeightListPageState extends State<WeightListPage> {
+  final Stream<QuerySnapshot> _usersStream =
+      FirebaseFirestore.instance.collection('today').snapshots();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,62 +23,36 @@ class _WeightListPageState extends State<WeightListPage> {
           },
         ),
       ),
-      body: _buildBody(context),
-    );
-  }
+      body: Center(
+        child: StreamBuilder<QuerySnapshot>(
+          stream: _usersStream,
+          builder:
+              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Text("Loading");
+            }
 
-  Stack _buildBody(BuildContext context) {
-    final WeightDataController controller = Provider.of(context);
-    return Stack(
-      children: <Widget>[
-        if (controller.today.isEmpty && !controller.isLoading)
-          Scrollbar(
-              child: RefreshIndicator(
-                  onRefresh: () => controller.refresh(),
-                  child: ListView(
-                    children: <Widget>[
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text("データがありません"),
-                        ],
-                      )
-                    ],
-                  ))),
-        if (controller.today.isNotEmpty)
-          Scrollbar(
-            child: RefreshIndicator(
-              onRefresh: () => controller.refresh(),
-              child: ListView.separated(
-                itemBuilder: (_, int index) {
-                  WeightData today = controller.today[index];
-                  return ListTile(
-                    title: Text(
-                      today.date.toString(),
-                    ),
-                    contentPadding:
-                        EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                    subtitle: Text(
-                      today.weight.toString(),
-                    ),
-                  );
-                },
-                separatorBuilder: (_, __) {
-                  return Divider(
-                    height: 1,
-                    indent: 15,
-                    endIndent: 15,
-                  );
-                },
-                itemCount: controller.today.length,
-              ),
-            ),
-          ),
-        if (controller.today.isEmpty && controller.isLoading)
-          Center(
-            child: CircularProgressIndicator(),
-          )
-      ],
+            return ListView(
+              children: snapshot.data!.docs.map((DocumentSnapshot document) {
+                Map<String, dynamic> data =
+                    document.data()! as Map<String, dynamic>;
+                return ListTile(
+                  title: Text(
+                    data['weight'].toString(),
+                  ),
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                  subtitle: Text(
+                    DateFormat("yyyy/MM/dd")
+                        .format(data['date'].toDate())
+                        .toString(),
+                  ),
+                );
+              }).toList(),
+            );
+          },
+        ),
+      ),
     );
   }
 }
