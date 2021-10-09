@@ -1,6 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:health_app/second_page/weight_data.dart';
+import 'package:health_app/third_page/weight_list_model.dart';
+import 'package:provider/provider.dart';
 
 class WeightListPage extends StatefulWidget {
   @override
@@ -8,49 +9,43 @@ class WeightListPage extends StatefulWidget {
 }
 
 class _WeightListPageState extends State<WeightListPage> {
-  final Stream<QuerySnapshot> _usersStream =
-      FirebaseFirestore.instance.collection('today').snapshots();
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: FloatingActionButton(
-          child: Text('戻る'),
-          onPressed: () {
-            // 1つ前に戻る
-            Navigator.pop(context);
-          },
+    return ChangeNotifierProvider<WeightListModel>(
+      create: (_) => WeightListModel()..fetchWeightList(),
+      child: Scaffold(
+        appBar: AppBar(
+          leading: FloatingActionButton(
+            child: Text('戻る'),
+            onPressed: () {
+              // 1つ前に戻る
+              Navigator.pop(context);
+            },
+          ),
         ),
-      ),
-      body: Center(
-        child: StreamBuilder<QuerySnapshot>(
-          stream: _usersStream,
-          builder:
-              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Text("Loading");
+        body: Center(
+          child: Consumer<WeightListModel>(builder: (context, model, child) {
+            final List<WeightData>? today = model.today;
+            if (today == null) {
+              return CircularProgressIndicator();
             }
 
+            final List<Widget> widgets = today
+                .map(
+                  (weightData) => ListTile(
+                    title: Text(
+                      weightData.weight.toString(),
+                    ),
+                    subtitle: Text(
+                      weightData.date.toString(),
+                    ),
+                  ),
+                )
+                .toList();
             return ListView(
-              children: snapshot.data!.docs.map((DocumentSnapshot document) {
-                Map<String, dynamic> data =
-                    document.data()! as Map<String, dynamic>;
-                return ListTile(
-                  title: Text(
-                    data['weight'].toString(),
-                  ),
-                  contentPadding:
-                      EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                  subtitle: Text(
-                    DateFormat("yyyy/MM/dd")
-                        .format(data['date'].toDate())
-                        .toString(),
-                  ),
-                );
-              }).toList(),
+              children: widgets,
             );
-          },
+          }),
         ),
       ),
     );
