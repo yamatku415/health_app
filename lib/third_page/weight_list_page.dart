@@ -25,19 +25,19 @@ class _WeightListPageState extends State<WeightListPage> {
         ),
         body: Center(
           child: Consumer<WeightListModel>(builder: (context, model, child) {
-            final List<WeightData>? today = model.today;
+            final List<ToWeightData>? today = model.today;
             if (today == null) {
               return CircularProgressIndicator();
             }
 
             final List<Widget> widgets = today
                 .map(
-                  (weightData) => ListTile(
+                  (toWeightData) => ListTile(
                     title: Text(
-                      weightData.weight.toString(),
+                      toWeightData.toweight.toString(),
                     ),
                     subtitle: Text(
-                      weightData.date.toString(),
+                      toWeightData.todate.toString(),
                     ),
                   ),
                 )

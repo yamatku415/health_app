@@ -6,19 +6,20 @@ import 'package:health_app/second_page/weight_data.dart';
 class WeightListModel extends ChangeNotifier {
   final Stream<QuerySnapshot> _usersStream =
       FirebaseFirestore.instance.collection('today').snapshots();
-  List<WeightData>? today;
+  List<ToWeightData>? today;
 
   void fetchWeightList() {
     _usersStream.listen((QuerySnapshot snapshot) {
-      final List<WeightData> today =
+      final List<ToWeightData> today =
           snapshot.docs.map((DocumentSnapshot document) {
         Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
 
-        final DateTime date = data['date'];
-        final double weight = data['weight'];
-        return WeightData(date, weight);
+        final String todate = data['todate'];
+        final String toweight = data['toweight'];
+        return ToWeightData(todate, toweight);
       }).toList();
       this.today = today;
+
       notifyListeners();
     });
   }

@@ -6,3 +6,9 @@ class WeightData {
 }
 
 //もしかしたらここが原因で動かないのかも  おそらくbookのこと
+
+class ToWeightData {
+  ToWeightData(this.todate, this.toweight);
+  String todate;
+  String toweight;
+}
