@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:health_app/add_weight/add_weight_page.dart';
 import 'package:health_app/second_page/weight_data.dart';
 import 'package:health_app/third_page/weight_list_model.dart';
 import 'package:provider/provider.dart';
@@ -22,6 +23,7 @@ class _WeightListPageState extends State<WeightListPage> {
               Navigator.pop(context);
             },
           ),
+          title: Center(child: Text('あなたの体重一覧')),
         ),
         body: Center(
           child: Consumer<WeightListModel>(builder: (context, model, child) {
@@ -47,6 +49,21 @@ class _WeightListPageState extends State<WeightListPage> {
             );
           }),
         ),
+        floatingActionButton:
+            Consumer<WeightListModel>(builder: (context, model, child) {
+          return FloatingActionButton(
+              child: Icon(Icons.add),
+              onPressed: () async {
+                // 1つ前に戻る
+                await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AddWeightPage(),
+                  ),
+                );
+                model.fetchWeightList();
+              });
+        }),
       ),
     );
   }

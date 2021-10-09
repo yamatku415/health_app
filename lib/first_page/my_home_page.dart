@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:health_app/add_weight/add_weight_page.dart';
 import 'package:health_app/second_page/line_graph.dart';
 import 'package:health_app/third_page/weight_list_page.dart';
 
@@ -43,7 +44,7 @@ class _MyHomePage extends State<MyHomePage> {
                 decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     icon: Icon(Icons.create),
-                    hintText: '～cm',
+                    hintText: '0.0cm',
                     labelText: '身長'),
                 validator: (value) {
                   if (value!.isEmpty) {
@@ -59,7 +60,7 @@ class _MyHomePage extends State<MyHomePage> {
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
                   icon: Icon(Icons.create),
-                  hintText: '～kg',
+                  hintText: '0.0kg',
                   labelText: '体重',
                 ),
                 validator: (value) {
@@ -93,7 +94,21 @@ class _MyHomePage extends State<MyHomePage> {
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextButton(
-                      child: Text('体重リストへ'),
+                      child: Text('今日の体重記入'),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AddWeightPage(),
+                            ));
+                      }),
+                ),
+              ),
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextButton(
+                      child: Text('体重リスト'),
                       onPressed: () {
                         Navigator.push(
                             context,
@@ -105,7 +120,7 @@ class _MyHomePage extends State<MyHomePage> {
               ),
               Center(
                 child: TextButton(
-                  child: Text('グラフへ'),
+                  child: Text('グラフ'),
                   onPressed: () {
                     // 押したら反応するコードを書く
                     // 画面遷移のコード
