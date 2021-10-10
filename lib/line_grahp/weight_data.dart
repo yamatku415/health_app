@@ -8,7 +8,8 @@ class WeightData {
 //もしかしたらここが原因で動かないのかも  おそらくbookのこと
 
 class ToWeightData {
-  ToWeightData(this.todate, this.toweight);
+  ToWeightData(this.id, this.todate, this.toweight);
+  String id;
   String todate;
   String toweight;
 }

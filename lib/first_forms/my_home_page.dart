@@ -2,8 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:health_app/add_weight/add_weight_page.dart';
-import 'package:health_app/second_page/line_graph.dart';
-import 'package:health_app/third_page/weight_list_page.dart';
+import 'package:health_app/line_grahp/graph_page.dart';
+
+import 'package:health_app/weight_list/weight_list_page.dart';
 
 class MyHomePage extends StatefulWidget {
   @override

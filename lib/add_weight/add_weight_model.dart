@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 class AddWeightModel extends ChangeNotifier {
   String? toweight;
   String? todate;
+
   Future addWeight() async {
     if (toweight == null || toweight!.isEmpty) {
       throw '体重を入力してください';
@@ -17,5 +18,11 @@ class AddWeightModel extends ChangeNotifier {
       'toweight': toweight,
       'todate': todate,
     });
+  }
+
+  Future inWeight() async {
+    if (toweight == null || toweight!.isEmpty) {
+      throw '体重を入力してください';
+    }
   }
 }
