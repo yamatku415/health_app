@@ -15,7 +15,7 @@ class WeightListModel extends ChangeNotifier {
         Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
         final String id = document.id;
         final String todate = data['todate'];
-        final String toweight = data['toweight'];
+        final num toweight = data['toweight'];
         return ToWeightData(id, todate, toweight);
       }).toList();
       this.today = today;

@@ -5,11 +5,11 @@ class WeightData {
   double weight;
 }
 
-//もしかしたらここが原因で動かないのかも  おそらくbookのこと
+//もしかしたらここが原因で動かないのかも
 
 class ToWeightData {
   ToWeightData(this.id, this.todate, this.toweight);
   String id;
   String todate;
-  String toweight;
+  num toweight;
 }

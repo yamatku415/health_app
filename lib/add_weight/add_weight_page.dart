@@ -35,8 +35,8 @@ class AddWeightPage extends StatelessWidget {
                         icon: Icon(Icons.create),
                         hintText: '0.0kg',
                         labelText: '今日の体重'),
-                    onChanged: (text) {
-                      model.toweight = text;
+                    onChanged: (s) {
+                      model.toweight = s as num?;
                     },
                   ),
                   TextFormField(

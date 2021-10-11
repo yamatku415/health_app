@@ -6,7 +6,7 @@ import 'package:health_app/line_grahp/weight_data.dart';
 class EditWeightModel extends ChangeNotifier {
   final ToWeightData toWeightData;
   EditWeightModel(this.toWeightData) {
-    toweightController.text = toWeightData.toweight;
+    toweightController.text = toWeightData.toweight as String;
     todatetController.text = toWeightData.todate;
   }
 

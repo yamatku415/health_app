@@ -19,6 +19,7 @@ class _WeightListPageState extends State<WeightListPage> {
       child: Scaffold(
         appBar: AppBar(
           leading: FloatingActionButton(
+            heroTag: "hero1",
             child: Text('戻る'),
             onPressed: () {
               // 1つ前に戻る
@@ -94,6 +95,7 @@ class _WeightListPageState extends State<WeightListPage> {
         floatingActionButton:
             Consumer<WeightListModel>(builder: (context, model, child) {
           return FloatingActionButton(
+              heroTag: "hero2",
               child: Icon(Icons.add),
               onPressed: () async {
                 // 画面遷移
