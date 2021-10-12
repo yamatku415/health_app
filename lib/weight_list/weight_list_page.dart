@@ -1,10 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:health_app/add_weight/add_weight_page.dart';
-import 'package:health_app/edit_weight/edit_weight_page.dart';
-import 'package:health_app/line_grahp/weight_data.dart';
-import 'package:health_app/weight_list/weight_list_model.dart';
-import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
 class WeightListPage extends StatefulWidget {
   @override
@@ -12,147 +8,51 @@ class WeightListPage extends StatefulWidget {
 }
 
 class _WeightListPageState extends State<WeightListPage> {
+  final Stream<QuerySnapshot> _usersStream =
+      FirebaseFirestore.instance.collection('today').snapshots();
+
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<WeightListModel>(
-      create: (_) => WeightListModel()..fetchWeightList(),
-      child: Scaffold(
-        appBar: AppBar(
-          leading: FloatingActionButton(
-            heroTag: "hero1",
-            child: Text('戻る'),
-            onPressed: () {
-              // 1つ前に戻る
-              Navigator.pop(context);
-            },
-          ),
-          title: Center(child: Text('あなたの体重一覧')),
+    return Scaffold(
+      appBar: AppBar(
+        leading: FloatingActionButton(
+          child: Text('戻る'),
+          onPressed: () {
+            // 1つ前に戻る
+            Navigator.pop(context);
+          },
         ),
-        body: Center(
-          child: Consumer<WeightListModel>(builder: (context, model, child) {
-            final List<ToWeightData>? today = model.today;
-            if (today == null) {
-              return CircularProgressIndicator();
+      ),
+      body: Center(
+        child: StreamBuilder<QuerySnapshot>(
+          stream: _usersStream,
+          builder:
+              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Text("Loading");
             }
 
-            final List<Widget> widgets = today
-                .map(
-                  (toWeightData) => Slidable(
-                    actionPane: SlidableDrawerActionPane(),
-                    child: ListTile(
-                      title: Text(
-                        toWeightData.toweight.toString(),
-                      ),
-                      subtitle: Text(
-                        toWeightData.todate.toString(),
-                      ),
-                    ),
-                    secondaryActions: <Widget>[
-                      IconSlideAction(
-                          caption: '編集',
-                          color: Colors.black45,
-                          icon: Icons.edit,
-                          onTap: () async {
-                            //編集画面に遷移
-
-                            final bool? added = await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    EditWeightPage(toWeightData),
-                              ),
-                            );
-
-                            if (added != null && added) {
-                              final snackBar = SnackBar(
-                                backgroundColor: Colors.green,
-                                content: Text('体重を追加しました'),
-                              );
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(snackBar);
-                            }
-
-                            model.fetchWeightList();
-                          }),
-                      IconSlideAction(
-                          caption: '削除',
-                          color: Colors.red,
-                          icon: Icons.delete,
-                          onTap: () async {
-                            //削除しますかで、「はい」であれば削除
-                            await showConfirmDaialog(
-                                context, toWeightData, model);
-                          }),
-                    ],
-                  ),
-                )
-                .toList();
             return ListView(
-              children: widgets,
-            );
-          }),
-        ),
-        floatingActionButton:
-            Consumer<WeightListModel>(builder: (context, model, child) {
-          return FloatingActionButton(
-              heroTag: "hero2",
-              child: Icon(Icons.add),
-              onPressed: () async {
-                // 画面遷移
-                final bool? added = await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => AddWeightPage(),
-                    fullscreenDialog: true,
+              children: snapshot.data!.docs.map((DocumentSnapshot document) {
+                Map<String, dynamic> data =
+                    document.data()! as Map<String, dynamic>;
+                return ListTile(
+                  title: Text(
+                    data['weight'].toString(),
+                  ),
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                  subtitle: Text(
+                    DateFormat("yyyy/MM/dd")
+                        .format(data['date'].toDate())
+                        .toString(),
                   ),
                 );
-
-                if (added != null && added) {
-                  final snackBar = SnackBar(
-                    backgroundColor: Colors.green,
-                    content: Text('体重を追加しました'),
-                  );
-                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                }
-
-                model.fetchWeightList();
-              });
-        }),
+              }).toList(),
+            );
+          },
+        ),
       ),
-    );
-  }
-
-  Future showConfirmDaialog(
-      BuildContext context, ToWeightData toWeightData, WeightListModel model) {
-    return showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (_) {
-        return AlertDialog(
-          title: Text("削除の確認"),
-          content: Text("${toWeightData.todate}の体重を削除しますか？"),
-          actions: [
-            TextButton(
-              child: Text("いいえ"),
-              onPressed: () => Navigator.pop(context),
-            ),
-            TextButton(
-              child: Text("はい"),
-              onPressed: () async {
-                //modelで削除
-                await model.delete(toWeightData);
-                Navigator.pop(context);
-                final snackBar = SnackBar(
-                  backgroundColor: Colors.green,
-                  content: Text('${toWeightData.todate}の体重を削除しました'),
-                );
-                model.fetchWeightList();
-                ScaffoldMessenger.of(context).showSnackBar(snackBar);
-              },
-            ),
-          ],
-        );
-      },
     );
   }
 }
