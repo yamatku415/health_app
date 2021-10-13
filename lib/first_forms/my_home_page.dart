@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:health_app/add_weight/add_weight_page.dart';
 import 'package:health_app/weight_list/weight_list_page.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -94,7 +95,11 @@ class _MyHomePage extends State<MyHomePage> {
                   child: TextButton(
                       child: Text('今日の体重記入'),
                       onPressed: () {
-                        //todo add_weight_pageへの画面遷移を書く
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AddWeightPage(),
+                            ));
                       }),
                 ),
               ),
@@ -116,7 +121,8 @@ class _MyHomePage extends State<MyHomePage> {
                 child: TextButton(
                   child: Text('グラフ'),
                   onPressed: () {
-                    // todo グラフのページに画面遷移
+                    // 押したら反応するコードを書く
+                    //todo gurahu画面遷移のコード
                   },
                 ),
               ),
