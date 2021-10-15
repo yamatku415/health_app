@@ -1,9 +1,11 @@
 class WeightData {
-  WeightData(this.date, this.weight);
+  WeightData(this.id, this.date, this.weight);
+  String? id;
   DateTime date;
-  double weight;
+  String weight;
 }
 
+//理想体重のデータ
 class AnWeightData {
   AnWeightData(this.anData, this.anWeight);
   DateTime anData;

@@ -3,25 +3,25 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class AddWeightModel extends ChangeNotifier {
-  String? toweight;
-  String? todate;
+  String? weight;
+  DateTime? date;
 
   Future addWeight() async {
-    if (toweight == null || toweight!.isEmpty) {
+    if (weight == null || weight!.isEmpty) {
       throw '体重を入力してください';
     }
-    if (todate == null || todate!.isEmpty) {
+    if (date == null) {
       throw '日付を入力してください';
     }
     //firestoreに追加
     await FirebaseFirestore.instance.collection('today').add({
-      'toweight': toweight,
-      'todate': todate,
+      'weight': weight,
+      'date': date,
     });
   }
 
   Future inWeight() async {
-    if (toweight == null || toweight!.isEmpty) {
+    if (weight == null || weight!.isEmpty) {
       throw '体重を入力してください';
     }
   }
