@@ -36,7 +36,7 @@ class AddWeightPage extends StatelessWidget {
                         hintText: '0.0kg',
                         labelText: '今日の体重'),
                     onChanged: (text) {
-                      model.weight = text;
+                      model.toweight = text;
                     },
                   ),
                   TextFormField(
@@ -49,7 +49,7 @@ class AddWeightPage extends StatelessWidget {
                         hintText: '0000(00月00日)',
                         labelText: '今日の日付'),
                     onChanged: (text) {
-                      model.date = text;
+                      model.todate = text;
                     },
                   ),
                   ElevatedButton(

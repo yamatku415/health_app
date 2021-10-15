@@ -1,6 +1,11 @@
 class WeightData {
-  WeightData(this.id, this.date, this.weight);
-  String? id;
-  String? date;
-  String? weight;
+  WeightData(this.date, this.weight);
+  DateTime date;
+  double weight;
+}
+
+class AnWeightData {
+  AnWeightData(this.anData, this.anWeight);
+  DateTime anData;
+  double anWeight;
 }
