@@ -127,9 +127,7 @@ class _MyHomePage extends State<MyHomePage> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => GraphPage(
-                            isShowingMainData: true,
-                          ),
+                          builder: (context) => GraphPage(),
                         ));
                   },
                 ),

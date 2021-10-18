@@ -5,6 +5,17 @@ class WeightData {
   String weight;
 }
 
+
+
+
+//グラフを動かすために仮で作った
+class NowWeightData {
+  NowWeightData(this.nowDate, this.nowWeight);
+
+  DateTime nowDate;
+  double nowWeight;
+}
+
 //理想体重のデータ
 class AnWeightData {
   AnWeightData(this.anData, this.anWeight);
