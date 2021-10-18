@@ -5,9 +5,6 @@ class WeightData {
   String weight;
 }
 
-
-
-
 //グラフを動かすために仮で作った
 class NowWeightData {
   NowWeightData(this.nowDate, this.nowWeight);
