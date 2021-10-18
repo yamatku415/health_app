@@ -35,7 +35,6 @@ class _AddWeightPage extends State<AddWeightPage> {
                   TextFormField(
                     textInputAction: TextInputAction.done,
                     keyboardType: TextInputType.number,
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         icon: Icon(Icons.create),
@@ -52,7 +51,7 @@ class _AddWeightPage extends State<AddWeightPage> {
                           Center(
                               child: Text(
                                   "${DateFormat('MM/dd/yyyy').format(_date)}")),
-                          new ElevatedButton(
+                          ElevatedButton(
                             onPressed: () => _selectDate(context),
                             child: Text('日付選択'),
                           )

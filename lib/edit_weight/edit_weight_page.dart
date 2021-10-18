@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:health_app/line_grahp/weight_data.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import 'edit_weight_model.dart';
 
-class EditWeightPage extends StatelessWidget {
-  final WeightData weightData;
-  EditWeightPage(this.weightData);
+class EditWeightPage extends StatefulWidget {
+  EditWeightPage(WeightData weightData);
+
+  @override
+  _EditWeightPageState createState() => _EditWeightPageState();
+}
+
+class _EditWeightPageState extends State<EditWeightPage> {
+  late final WeightData weightData;
 
   @override
   Widget build(BuildContext context) {
@@ -42,20 +49,19 @@ class EditWeightPage extends StatelessWidget {
                       model.setToWeight(text);
                     },
                   ),
-                  TextFormField(
-                    controller: model.datetController,
-                    textInputAction: TextInputAction.done,
-                    keyboardType: TextInputType.number,
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        icon: Icon(Icons.create),
-                        hintText: '0000(00月00日)',
-                        labelText: '今日の日付'),
-                    onChanged: (text) {
-                      model.setToDte(text);
-                    },
-                  ),
+                  Container(
+                      padding: const EdgeInsets.all(50.0),
+                      child: Column(
+                        children: <Widget>[
+                          Center(
+                              child: Text(
+                                  "${DateFormat('MM/dd/yyyy').format(_date)}")),
+                          ElevatedButton(
+                            onPressed: () => _edSelectDate(context),
+                            child: Text('日付選択'),
+                          )
+                        ],
+                      )),
                   ElevatedButton(
                     onPressed: model.isUpdated()
                         ? () async {
@@ -86,5 +92,17 @@ class EditWeightPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  DateTime _date = DateTime.now();
+  Future<Null> _edSelectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: _date,
+        firstDate: DateTime(2018),
+        lastDate: DateTime.now().add(Duration(days: 360)));
+    if (picked != null) {
+      setState(() => _date = picked);
+    }
   }
 }
