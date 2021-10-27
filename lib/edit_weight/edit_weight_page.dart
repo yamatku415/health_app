@@ -14,7 +14,7 @@ class EditWeightPage extends StatefulWidget {
 }
 
 class _EditWeightPageState extends State<EditWeightPage> {
-  late final WeightData weightData;
+  late WeightData weightData;
 
   @override
   Widget build(BuildContext context) {

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:health_app/line_grahp/weight_data.dart';
 
 class EditWeightModel extends ChangeNotifier {
-  final WeightData weightData;
+  WeightData weightData;
   EditWeightModel(this.weightData) {
     weightController.text = weightData.weight;
     datetController.text = weightData.date.toString();
