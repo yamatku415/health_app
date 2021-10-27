@@ -1,15 +1,18 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
-import 'line_graph.dart';
+import 'first_forms/my_home_page.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -18,123 +21,6 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.green,
       ),
       home: MyHomePage(),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  @override
-  _MyHomePage createState() => _MyHomePage();
-}
-
-class _MyHomePage extends State<MyHomePage> {
-  final heightController = TextEditingController();
-  final weightController = TextEditingController();
-  final todayweightController = TextEditingController();
-  late List<TextInputFormatter>? inputFormatters;
-  late double height;
-  late double weight;
-  late double todayweight;
-  var ideal;
-
-  @override
-  void initState() {
-    super.initState();
-    //myController.addListener(_Value);
-  }
-
-  // void _Value() {
-  //   print("入力状況: ${myController.text}");
-  // }
-
-  // void _handleText(String e) {
-  //   setState(() {
-  //     height = e;
-  //   });
-  // }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          '身長と体重を記入',
-        ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            TextField(
-              autofocus: true,
-              keyboardType: TextInputType.number,
-              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                icon: Icon(Icons.create),
-                hintText: '～cm',
-                labelText: '身長',
-              ),
-              controller: heightController,
-            ),
-            TextField(
-              keyboardType: TextInputType.number,
-              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                icon: Icon(Icons.create),
-                hintText: '～kg',
-                labelText: '体重',
-              ),
-              controller: weightController,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: FloatingActionButton(
-                  child: Text('決定'),
-                  onPressed: () {
-                    //todo フォーカスするためのコード
-                    height = double.parse(heightController.text);
-                    weight = double.parse(weightController.text);
-                    ideal = (weight - (weight * 0.02 * 6)).toStringAsFixed(1);
-                    print(ideal);
-                  }),
-            ),
-            TextField(
-              keyboardType: TextInputType.number,
-              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                icon: Icon(Icons.create),
-                hintText: '～kg',
-                labelText: '今日の体重',
-              ),
-              controller: todayweightController,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: FloatingActionButton(
-                  child: Text('目標決定'),
-                  onPressed: () {
-                    //todo フォーカスするためのコード
-                    todayweight = double.parse(todayweightController.text);
-                  }),
-            ),
-            TextButton(
-              child: Text('グラフへ'),
-              onPressed: () {
-                // 押したら反応するコードを書く
-                // 画面遷移のコード
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => GraphPage(),
-                    ));
-              },
-            ),
-          ],
-        ),
-      ),
     );
   }
 }
