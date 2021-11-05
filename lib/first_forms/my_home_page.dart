@@ -5,6 +5,13 @@ import 'package:health_app/add_weight/add_weight_page.dart';
 import 'package:health_app/line_grahp/graph_page.dart';
 import 'package:health_app/weight_list/weight_list_page.dart';
 
+class Kyouyuu {
+  Kyouyuu._();
+  static final instance = Kyouyuu._();
+  double? nowWeight;
+  double? ideal;
+}
+
 class MyHomePage extends StatefulWidget {
   @override
   _MyHomePage createState() => _MyHomePage();
@@ -14,12 +21,10 @@ class _MyHomePage extends State<MyHomePage> {
   final _formKey = GlobalKey<FormState>();
   final heightController = TextEditingController();
   final weightController = TextEditingController();
-  final todayweightController = TextEditingController();
   late List<TextInputFormatter>? inputFormatters;
   late double nowHeight;
-  late double nowWeight;
-  late double todayweight;
-  var ideal;
+
+  //late finalはidealが計算された後にその値が定数になっているということなのか
 
   @override
   Widget build(BuildContext context) {
@@ -78,11 +83,15 @@ class _MyHomePage extends State<MyHomePage> {
                       // バリデーションチェック
                       if (_formKey.currentState!.validate()) {
                         //todo フォーカスするためのコード
+
                         nowHeight = double.parse(heightController.text);
-                        nowWeight = double.parse(weightController.text);
+                        Kyouyuu.instance.nowWeight =
+                            double.parse(weightController.text);
                         setState(() {
-                          ideal = (nowWeight - (nowWeight * 0.02 * 6))
-                              .toStringAsFixed(1);
+                          Kyouyuu.instance.ideal = double.parse(
+                              (Kyouyuu.instance.nowWeight! -
+                                      (Kyouyuu.instance.nowWeight! * 0.02 * 6))
+                                  .toStringAsFixed(1));
                         });
                       }
                     },
@@ -122,8 +131,6 @@ class _MyHomePage extends State<MyHomePage> {
                 child: TextButton(
                   child: Text('グラフ'),
                   onPressed: () {
-                    // 押したら反応するコードを書く
-                    //todo gurahu画面遷移のコード
                     Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -132,7 +139,8 @@ class _MyHomePage extends State<MyHomePage> {
                   },
                 ),
               ),
-              if (ideal != null) Center(child: Text('あなたの目標体重は$ideal.です')),
+              if (Kyouyuu.instance.ideal != null)
+                Center(child: Text('あなたの目標体重は${Kyouyuu.instance.ideal}です')),
             ],
           ),
         ),

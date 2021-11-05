@@ -23,6 +23,7 @@ class GraphData extends ChangeNotifier {
         //ここの文はWeightDataにリターンしてるということはWeightDataの方にデータが移っているのか？
         return WeightDataGraph(dateTime, weight);
       }).toList();
+      today.sort((a, b) => a.date.compareTo(b.date));
       this.today = today;
 
       notifyListeners();
