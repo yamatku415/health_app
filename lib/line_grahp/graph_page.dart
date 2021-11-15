@@ -71,18 +71,19 @@ class LinearSales {
 
   static List<LinearSales> weightIdealGraph() {
     final linearSalesList = <LinearSales>[];
+    double a = (Kyouyuu.instance.nowWeight! - Kyouyuu.instance.ideal!) /
+        180; //計算式（1日あたりの減らすべき体重）
+    double reWeight = Kyouyuu.instance.nowWeight!;
 
     for (int days = 0; days != 180; days++) {
-      //現状ではansWeightに値が上書きされているだけの計算になっていると思う、
       // どうすれば計算した値からまた新たに計算して数値を更新し続けられるのか
       ///この計算でメモリアウトしてるかもしれないので計算を確認しなおす。
       ///もしくはdayのように1づつ増えていく処理を書いてみる(多分計算のしかたのミス)
-      ///for文にfor文をかませているからバグるのでは
 
-      for (double reWeight = Kyouyuu.instance.nowWeight!;
-          reWeight != Kyouyuu.instance.ideal!;
-          (reWeight - Kyouyuu.instance.ideal!) / 180) {
-        linearSalesList.add(LinearSales(days, 78));
+      reWeight -= a;
+      linearSalesList.add(LinearSales(days, reWeight));
+      if (reWeight <= Kyouyuu.instance.ideal!) {
+        break;
       }
     }
     return linearSalesList;
