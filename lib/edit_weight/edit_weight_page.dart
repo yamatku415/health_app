@@ -6,15 +6,9 @@ import 'package:provider/provider.dart';
 
 import 'edit_weight_model.dart';
 
-class EditWeightPage extends StatefulWidget {
-  EditWeightPage(WeightData weightData);
-
-  @override
-  _EditWeightPageState createState() => _EditWeightPageState();
-}
-
-class _EditWeightPageState extends State<EditWeightPage> {
-  late WeightData weightData;
+class EditWeightPage extends StatelessWidget {
+  final WeightData weightData;
+  EditWeightPage(this.weightData);
 
   @override
   Widget build(BuildContext context) {
@@ -105,4 +99,6 @@ class _EditWeightPageState extends State<EditWeightPage> {
       setState(() => _date = picked);
     }
   }
+
+  void setState(DateTime Function() param0) {}
 }
