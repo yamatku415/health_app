@@ -6,14 +6,19 @@ import 'package:provider/provider.dart';
 
 import 'edit_weight_model.dart';
 
-class EditWeightPage extends StatelessWidget {
+class EditWeightPage extends StatefulWidget {
   final WeightData weightData;
   EditWeightPage(this.weightData);
 
   @override
+  _EditWeightPageState createState() => _EditWeightPageState();
+}
+
+class _EditWeightPageState extends State<EditWeightPage> {
+  @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<EditWeightModel>(
-      create: (_) => EditWeightModel(weightData),
+      create: (_) => EditWeightModel(widget.weightData),
       child: Scaffold(
         appBar: AppBar(
           leading: FloatingActionButton(
@@ -57,26 +62,23 @@ class EditWeightPage extends StatelessWidget {
                         ],
                       )),
                   ElevatedButton(
-                    onPressed: model.isUpdated()
-                        ? () async {
-                            //処理
-                            try {
-                              await model.update();
-                              final snackBar = SnackBar(
-                                backgroundColor: Colors.green,
-                                content: Text('変更しました'),
-                              );
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(snackBar);
-                            } catch (e) {
-                              final snackBar = SnackBar(
-                                content: Text(e.toString()),
-                              );
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(snackBar);
-                            }
-                          }
-                        : null,
+                    onPressed: () async {
+                      //処理
+                      try {
+                        String date = DateFormat('MM/dd/yyyy').format(_date);
+                        await model.update(model.weightController.text, date);
+                        final snackBar = SnackBar(
+                          backgroundColor: Colors.green,
+                          content: Text('変更しました'),
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      } catch (e) {
+                        final snackBar = SnackBar(
+                          content: Text(e.toString()),
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      }
+                    },
                     child: Text('変更する'),
                   )
                 ],
@@ -99,6 +101,4 @@ class EditWeightPage extends StatelessWidget {
       setState(() => _date = picked);
     }
   }
-
-  void setState(DateTime Function() param0) {}
 }

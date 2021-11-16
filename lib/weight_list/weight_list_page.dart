@@ -4,7 +4,6 @@ import 'package:health_app/add_weight/add_weight_page.dart';
 import 'package:health_app/edit_weight/edit_weight_page.dart';
 import 'package:health_app/line_grahp/weight_data.dart';
 import 'package:health_app/weight_list/weight_list_model.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class WeightListPage extends StatefulWidget {
@@ -44,7 +43,7 @@ class _WeightListPageState extends State<WeightListPage> {
                         weightData.weight,
                       ),
                       subtitle: Text(
-                        DateFormat("yyyy/MM/dd").format(weightData.date),
+                        weightData.date,
                       ),
                     ),
                     secondaryActions: <Widget>[
@@ -129,8 +128,7 @@ class _WeightListPageState extends State<WeightListPage> {
       builder: (_) {
         return AlertDialog(
           title: Text("削除の確認"),
-          content: Text(
-              "${DateFormat("yyyy/MM/dd").format(weightData.date)}の体重を削除しますか？"),
+          content: Text("${weightData.date}の体重を削除しますか？"),
           actions: [
             TextButton(
               child: Text("いいえ"),
@@ -144,8 +142,7 @@ class _WeightListPageState extends State<WeightListPage> {
                 Navigator.pop(context);
                 final snackBar = SnackBar(
                   backgroundColor: Colors.green,
-                  content: Text(
-                      '${DateFormat("yyyy/MM/dd").format(weightData.date)}の体重を削除しました'),
+                  content: Text('${weightData.date}の体重を削除しました'),
                 );
                 model.fetchWeightList();
                 ScaffoldMessenger.of(context).showSnackBar(snackBar);

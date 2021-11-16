@@ -7,11 +7,9 @@ class EditWeightModel extends ChangeNotifier {
   WeightData weightData;
   EditWeightModel(this.weightData) {
     weightController.text = weightData.weight;
-    datetController.text = weightData.date.toString();
   }
 
   final weightController = TextEditingController();
-  final datetController = TextEditingController();
 
   String? weight;
   String? date;
@@ -30,9 +28,9 @@ class EditWeightModel extends ChangeNotifier {
     return weight != null || date != null;
   }
 
-  Future update() async {
-    this.weight = weightController.text;
-    this.date = datetController.text;
+  Future update(weight, date) async {
+    this.weight = weight;
+    this.date = date;
 
     //firestoreに追加
     await FirebaseFirestore.instance

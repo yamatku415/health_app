@@ -1,10 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:health_app/add_weight/add_weight_page.dart';
 import 'package:health_app/line_grahp/graph_page.dart';
 import 'package:health_app/weight_list/weight_list_page.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Kyouyuu {
   //ここの値は変更されずに様々なクラスから参照される。
@@ -27,8 +26,13 @@ class _MyHomePage extends State<MyHomePage> {
   final heightController = TextEditingController();
   final weightController = TextEditingController();
   late double nowHeight;
+  late SharedPreferences prefs;
 
-  //late finalはidealが計算された後にその値が定数になっているということなのか
+  Future<void> saveDate() async {
+    prefs = await SharedPreferences.getInstance();
+  }
+
+  Future<void> setData() async {}
 
   @override
   Widget build(BuildContext context) {
@@ -80,10 +84,9 @@ class _MyHomePage extends State<MyHomePage> {
                   padding: const EdgeInsets.all(30.0),
                   child: Column(
                     children: <Widget>[
-                      if (Kyouyuu.instance.firstDay != null)
-                        Center(
-                            child: Text(
-                                "${DateFormat('MM/dd/yyyy').format(_date)}")),
+                      if (Kyouyuu.instance.firstDay != null) Center(child: Text(
+                          //ここ一文でStringになっている？
+                          "${DateFormat('MM/dd/yyyy').format(_date)}")),
                       Center(
                           child: ElevatedButton(
                         onPressed: () {
@@ -163,6 +166,7 @@ class _MyHomePage extends State<MyHomePage> {
                       side: BorderSide(color: Colors.green),
                     ),
                     onPressed: () {
+                      ///idealがnullだったらelse文使ってスナックバー表示
                       if (Kyouyuu.instance.ideal != null)
                         Navigator.push(
                             context,

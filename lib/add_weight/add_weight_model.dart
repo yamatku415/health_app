@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 class AddWeightModel extends ChangeNotifier {
   String? weight;
-  DateTime? date;
+  String? date;
 
   Future addWeight() async {
     if (weight == null || weight!.isEmpty) {

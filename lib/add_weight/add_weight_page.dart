@@ -61,7 +61,8 @@ class _AddWeightPage extends State<AddWeightPage> {
                     onPressed: () async {
                       //処理
                       try {
-                        model.date = _date;
+                        String date = DateFormat('MM/dd/yyyy').format(_date);
+                        model.date = date;
                         await model.addWeight();
                         //todo
                         final snackBar = SnackBar(

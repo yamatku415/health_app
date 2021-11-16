@@ -7,7 +7,6 @@ class WeightListModel extends ChangeNotifier {
   final Stream<QuerySnapshot> _usersStream =
       FirebaseFirestore.instance.collection('today').snapshots();
   List<WeightData>? today;
-  DateTime dateTime = DateTime.now();
 
   void fetchWeightList() {
     _usersStream.listen((QuerySnapshot snapshot) {
@@ -16,13 +15,10 @@ class WeightListModel extends ChangeNotifier {
         Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
         final String id = document.id;
         final date = data['date'];
-        if (date is Timestamp) {
-          this.dateTime = date.toDate();
-        }
         final String weight = data['weight'];
 
         //ここの文はWeightDataにリターンしてるということはWeightDataの方にデータが移っているのか？
-        return WeightData(id, dateTime, weight);
+        return WeightData(id, date, weight);
       }).toList();
       today.sort((a, b) => a.date.compareTo(b.date));
       this.today = today;
