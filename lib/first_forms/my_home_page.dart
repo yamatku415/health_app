@@ -25,14 +25,30 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePage extends State<MyHomePage> {
   final heightController = TextEditingController();
   final weightController = TextEditingController();
-  late double nowHeight;
-  late SharedPreferences prefs;
+  double? nowHeight;
+  String? fDate;
 
-  Future<void> saveDate() async {
-    prefs = await SharedPreferences.getInstance();
+  Future<void> setData() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString('height', heightController.text);
+    prefs.setString('weight', weightController.text);
+    prefs.setString('date', fDate!);
+    prefs.setDouble('ideal', Kyouyuu.instance.ideal!);
   }
 
-  Future<void> setData() async {}
+  Future<void> getDate() async {
+    final prefs = await SharedPreferences.getInstance();
+    heightController.text = prefs.getString('height') ?? "";
+    weightController.text = prefs.getString('weight') ?? "";
+    fDate = prefs.getString('date');
+    Kyouyuu.instance.ideal = prefs.getDouble('ideal');
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getDate();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,14 +100,17 @@ class _MyHomePage extends State<MyHomePage> {
                   padding: const EdgeInsets.all(30.0),
                   child: Column(
                     children: <Widget>[
-                      if (Kyouyuu.instance.firstDay != null) Center(child: Text(
-                          //ここ一文でStringになっている？
-                          "${DateFormat('MM/dd/yyyy').format(_date)}")),
+                      Text(fDate ?? ""),
                       Center(
                           child: ElevatedButton(
                         onPressed: () {
-                          _selectDate(context);
-                          Kyouyuu.instance.firstDay = _date;
+                          if (fDate == null) {
+                            _selectDate(context);
+                            fDate = DateFormat('MM/dd/yyyy').format(_date);
+                          } else {
+                            _selectedDate(context);
+                            Kyouyuu.instance.firstDay = Formatter.parse(fDate!);
+                          }
                         },
                         child: Text('日付選択'),
                       )),
@@ -104,6 +123,8 @@ class _MyHomePage extends State<MyHomePage> {
                     // 送信ボタンクリック時の処理
                     onPressed: () {
                       // バリデーションチェック
+                      setData();
+
                       if (Kyouyuu.instance._formKey.currentState!.validate()) {
                         //todo フォーカスするためのコード
 
@@ -166,7 +187,17 @@ class _MyHomePage extends State<MyHomePage> {
                       side: BorderSide(color: Colors.green),
                     ),
                     onPressed: () {
-                      ///idealがnullだったらelse文使ってスナックバー表示
+                      ///idealがnullだったらelse文使ってスナックバー表示こっち！！
+                      setState(() {
+                        Kyouyuu.instance.nowWeight =
+                            double.parse(weightController.text);
+                        Kyouyuu.instance.ideal = double.parse(
+                            (Kyouyuu.instance.nowWeight! -
+                                    (Kyouyuu.instance.nowWeight! * 0.02 * 6))
+                                .toStringAsFixed(1));
+
+                        Kyouyuu.instance.firstDay = Formatter.parse(fDate!);
+                      });
                       if (Kyouyuu.instance.ideal != null)
                         Navigator.push(
                             context,
@@ -205,6 +236,18 @@ class _MyHomePage extends State<MyHomePage> {
         lastDate: DateTime.now().add(Duration(days: 360)));
     if (picked != null) {
       setState(() => _date = picked);
+    }
+  }
+
+  static final Formatter = DateFormat("MM/dd/yyyy");
+  Future<Null> _selectedDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: Formatter.parse(fDate!),
+        firstDate: DateTime(2018),
+        lastDate: DateTime.now().add(Duration(days: 360)));
+    if (picked != null) {
+      setState(() => Formatter.parse(fDate!) != picked);
     }
   }
 }

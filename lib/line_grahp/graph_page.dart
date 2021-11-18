@@ -76,10 +76,6 @@ class LinearSales {
     double reWeight = Kyouyuu.instance.nowWeight!;
 
     for (int days = 0; days != 180; days++) {
-      // どうすれば計算した値からまた新たに計算して数値を更新し続けられるのか
-      ///この計算でメモリアウトしてるかもしれないので計算を確認しなおす。
-      ///もしくはdayのように1づつ増えていく処理を書いてみる(多分計算のしかたのミス)
-
       reWeight -= a;
       linearSalesList.add(LinearSales(days, reWeight));
       if (reWeight <= Kyouyuu.instance.ideal!) {
