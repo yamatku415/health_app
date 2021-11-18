@@ -6,7 +6,17 @@ import 'package:provider/provider.dart';
 
 import 'graph_data.dart';
 
-class GraphPage extends StatelessWidget {
+class GraphPage extends StatefulWidget {
+  @override
+  _GraphPage createState() => _GraphPage();
+}
+
+class _GraphPage extends State<GraphPage> {
+  double mediaWidth = 80;
+  double scaleWidthFactor = 1;
+
+  double minWidth = 40;
+  double maxWidth = 160;
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<GraphData>(
@@ -28,8 +38,28 @@ class GraphPage extends StatelessWidget {
             return CircularProgressIndicator();
           }
 
-          return Column(
-              children: [Container(height: 240, child: _simpleLine(today))]);
+          return Column(children: [
+            Container(height: 600, child: _simpleLine(today)),
+            GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              child: Container(
+                width: double.infinity,
+                height: double.infinity,
+              ),
+              onScaleUpdate: (ScaleUpdateDetails data) {
+                if (mediaWidth * data.scale > minWidth &&
+                    mediaWidth * data.scale < maxWidth) {
+                  scaleWidthFactor = data.scale;
+                  setState(() {});
+                }
+              },
+              onScaleEnd: (ScaleEndDetails data) {
+                mediaWidth = mediaWidth * scaleWidthFactor;
+              },
+            ),
+
+
+          ]);
         }),
       ),
     );
@@ -67,7 +97,6 @@ class LinearSales {
   final int year;
   final double weight;
   LinearSales(this.year, this.weight);
-  //sharedpreferencesで保存したときにyear変数に１８０日分保存できるのか
 
   static List<LinearSales> weightIdealGraph() {
     final linearSalesList = <LinearSales>[];
