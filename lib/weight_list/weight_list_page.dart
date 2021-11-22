@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:health_app/add_weight/add_weight_page.dart';
 import 'package:health_app/edit_weight/edit_weight_page.dart';
-import 'package:health_app/line_grahp/weight_data.dart';
+import 'package:health_app/first_forms/weight_data.dart';
 import 'package:health_app/weight_list/weight_list_model.dart';
 import 'package:provider/provider.dart';
 
@@ -18,14 +18,7 @@ class _WeightListPageState extends State<WeightListPage> {
       create: (_) => WeightListModel()..fetchWeightList(),
       child: Scaffold(
         appBar: AppBar(
-          leading: FloatingActionButton(
-            child: Text('戻る'),
-            onPressed: () {
-              // 1つ前に戻る
-              Navigator.pop(context);
-            },
-          ),
-          title: Center(child: Text('あなたの体重一覧')),
+          title: Text('あなたの体重一覧'),
         ),
         body: Center(
           child: Consumer<WeightListModel>(builder: (context, model, child) {

@@ -1,11 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:health_app/line_grahp/weight_data.dart';
+import 'package:health_app/first_forms/weight_data.dart';
 
 class WeightListModel extends ChangeNotifier {
-  final Stream<QuerySnapshot> _usersStream =
-      FirebaseFirestore.instance.collection('today').snapshots();
+  final Stream<QuerySnapshot> _usersStream = FirebaseFirestore.instance
+      .collection('users')
+      .doc(uid)
+      .collection('today')
+      .snapshots();
   List<WeightData>? today;
 
   void fetchWeightList() {
@@ -34,3 +38,5 @@ class WeightListModel extends ChangeNotifier {
         .delete();
   }
 }
+
+String get uid => FirebaseAuth.instance.currentUser!.uid;

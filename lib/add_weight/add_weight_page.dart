@@ -18,14 +18,7 @@ class _AddWeightPage extends State<AddWeightPage> {
       create: (_) => AddWeightModel(),
       child: Scaffold(
         appBar: AppBar(
-          leading: FloatingActionButton(
-            child: Text('戻る'),
-            onPressed: () {
-              // 1つ前に戻る
-              Navigator.pop(context);
-            },
-          ),
-          title: Center(child: Text('今日の体重を追加')),
+          title: Text('今日の体重を追加'),
         ),
         body: Center(
           child: Consumer<AddWeightModel>(builder: (context, model, child) {

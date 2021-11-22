@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:health_app/add_weight/add_weight_page.dart';
 import 'package:health_app/line_grahp/graph_page.dart';
+import 'package:health_app/login/login_page.dart';
 import 'package:health_app/weight_list/weight_list_page.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -54,6 +55,17 @@ class _MyHomePage extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.logout),
+          onPressed: () {
+            // 1つ前に戻る
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => LoginPage(),
+                ));
+          },
+        ),
         title: Text(
           '身長と体重を記入',
         ),
@@ -109,7 +121,7 @@ class _MyHomePage extends State<MyHomePage> {
                             fDate = DateFormat('MM/dd/yyyy').format(_date);
                           } else {
                             _selectedDate(context);
-                            Kyouyuu.instance.firstDay = Formatter.parse(fDate!);
+                            Kyouyuu.instance.firstDay = formatter.parse(fDate!);
                           }
                         },
                         child: Text('日付選択'),
@@ -196,7 +208,7 @@ class _MyHomePage extends State<MyHomePage> {
                                     (Kyouyuu.instance.nowWeight! * 0.02 * 6))
                                 .toStringAsFixed(1));
 
-                        Kyouyuu.instance.firstDay = Formatter.parse(fDate!);
+                        Kyouyuu.instance.firstDay = formatter.parse(fDate!);
                       });
                       if (Kyouyuu.instance.ideal != null)
                         Navigator.push(
@@ -239,15 +251,15 @@ class _MyHomePage extends State<MyHomePage> {
     }
   }
 
-  static final Formatter = DateFormat("MM/dd/yyyy");
+  static final formatter = DateFormat("MM/dd/yyyy");
   Future<Null> _selectedDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
         context: context,
-        initialDate: Formatter.parse(fDate!),
+        initialDate: formatter.parse(fDate!),
         firstDate: DateTime(2018),
         lastDate: DateTime.now().add(Duration(days: 360)));
     if (picked != null) {
-      setState(() => Formatter.parse(fDate!) != picked);
+      setState(() => formatter.parse(fDate!) != picked);
     }
   }
 }

@@ -1,11 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:health_app/line_grahp/weight_data.dart';
+import 'package:health_app/first_forms/weight_data.dart';
+import 'package:health_app/weight_list/weight_list_model.dart';
 import 'package:intl/intl.dart';
 
 class GraphData extends ChangeNotifier {
-  final Stream<QuerySnapshot> _usersStream =
-      FirebaseFirestore.instance.collection('today').snapshots();
+  final Stream<QuerySnapshot> _usersStream = FirebaseFirestore.instance
+      .collection('users')
+      .doc(uid)
+      .collection('today')
+      .snapshots();
   List<WeightDataGraph>? today;
   DateTime dateTime = DateTime.now();
   static final _dateFormatter = DateFormat("MM/dd/yyyy");

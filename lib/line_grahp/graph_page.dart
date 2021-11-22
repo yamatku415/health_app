@@ -1,7 +1,7 @@
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 import 'package:health_app/first_forms/my_home_page.dart';
-import 'package:health_app/line_grahp/weight_data.dart';
+import 'package:health_app/first_forms/weight_data.dart';
 import 'package:provider/provider.dart';
 
 import 'graph_data.dart';
@@ -12,11 +12,6 @@ class GraphPage extends StatefulWidget {
 }
 
 class _GraphPage extends State<GraphPage> {
-  double mediaWidth = 80;
-  double scaleWidthFactor = 1;
-
-  double minWidth = 40;
-  double maxWidth = 160;
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<GraphData>(
@@ -24,13 +19,6 @@ class _GraphPage extends State<GraphPage> {
       child: Scaffold(
         appBar: AppBar(
           title: Text("体重グラフ"),
-          leading: FloatingActionButton(
-            child: Text('戻る'),
-            onPressed: () {
-              // 1つ前に戻る
-              Navigator.pop(context);
-            },
-          ),
         ),
         body: Consumer<GraphData>(builder: (context, model, child) {
           final List<WeightDataGraph>? today = model.today;
@@ -40,25 +28,6 @@ class _GraphPage extends State<GraphPage> {
 
           return Column(children: [
             Container(height: 600, child: _simpleLine(today)),
-            GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              child: Container(
-                width: double.infinity,
-                height: double.infinity,
-              ),
-              onScaleUpdate: (ScaleUpdateDetails data) {
-                if (mediaWidth * data.scale > minWidth &&
-                    mediaWidth * data.scale < maxWidth) {
-                  scaleWidthFactor = data.scale;
-                  setState(() {});
-                }
-              },
-              onScaleEnd: (ScaleEndDetails data) {
-                mediaWidth = mediaWidth * scaleWidthFactor;
-              },
-            ),
-
-
           ]);
         }),
       ),
