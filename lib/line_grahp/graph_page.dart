@@ -35,7 +35,7 @@ class _GraphPage extends State<GraphPage> {
   }
 
   Widget _simpleLine(List<WeightDataGraph> today) {
-    final since = Kyouyuu.instance.firstDay;
+    final since = SharedValues.instance.firstDay;
 
     var seriesList = [
       charts.Series<LinearSales, num>(
@@ -69,14 +69,15 @@ class LinearSales {
 
   static List<LinearSales> weightIdealGraph() {
     final linearSalesList = <LinearSales>[];
-    double a = (Kyouyuu.instance.nowWeight! - Kyouyuu.instance.ideal!) /
-        180; //計算式（1日あたりの減らすべき体重）
-    double reWeight = Kyouyuu.instance.nowWeight!;
+    double a =
+        (SharedValues.instance.nowWeight! - SharedValues.instance.ideal!) /
+            180; //計算式（1日あたりの減らすべき体重）
+    double reWeight = SharedValues.instance.nowWeight!;
 
     for (int days = 0; days != 180; days++) {
       reWeight -= a;
       linearSalesList.add(LinearSales(days, reWeight));
-      if (reWeight <= Kyouyuu.instance.ideal!) {
+      if (reWeight <= SharedValues.instance.ideal!) {
         break;
       }
     }

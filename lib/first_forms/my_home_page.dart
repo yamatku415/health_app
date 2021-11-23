@@ -6,15 +6,14 @@ import 'package:health_app/weight_list/weight_list_page.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class Kyouyuu {
+class SharedValues {
   //ここの値は変更されずに様々なクラスから参照される。
-  Kyouyuu._();
-  static final instance = Kyouyuu._();
-  double? nowWeight; //sharedpreferences
-  double? ideal; //sharedpreferences
+  SharedValues._();
+  static final instance = SharedValues._();
+  double? nowWeight;
+  double? ideal;
   DateTime? firstDay;
-  int? year; //sharedpreferences
-  double? sales; //sharedpreferences
+
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 }
 
@@ -34,7 +33,7 @@ class _MyHomePage extends State<MyHomePage> {
     prefs.setString('height', heightController.text);
     prefs.setString('weight', weightController.text);
     prefs.setString('date', fDate!);
-    prefs.setDouble('ideal', Kyouyuu.instance.ideal!);
+    prefs.setDouble('ideal', SharedValues.instance.ideal!);
   }
 
   Future<void> getDate() async {
@@ -42,7 +41,8 @@ class _MyHomePage extends State<MyHomePage> {
     heightController.text = prefs.getString('height') ?? "";
     weightController.text = prefs.getString('weight') ?? "";
     fDate = prefs.getString('date');
-    Kyouyuu.instance.ideal = prefs.getDouble('ideal');
+    SharedValues.instance.ideal = prefs.getDouble('ideal');
+    setState(() {});
   }
 
   @override
@@ -73,7 +73,7 @@ class _MyHomePage extends State<MyHomePage> {
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Form(
-          key: Kyouyuu.instance._formKey, // 作成したフォームキーを指定
+          key: SharedValues.instance._formKey, // 作成したフォームキーを指定
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -121,7 +121,8 @@ class _MyHomePage extends State<MyHomePage> {
                             fDate = DateFormat('MM/dd/yyyy').format(_date);
                           } else {
                             _selectedDate(context);
-                            Kyouyuu.instance.firstDay = formatter.parse(fDate!);
+                            SharedValues.instance.firstDay =
+                                formatter.parse(fDate!);
                           }
                         },
                         child: Text('日付選択'),
@@ -137,18 +138,9 @@ class _MyHomePage extends State<MyHomePage> {
                       // バリデーションチェック
                       setData();
 
-                      if (Kyouyuu.instance._formKey.currentState!.validate()) {
-                        //todo フォーカスするためのコード
-
-                        nowHeight = double.parse(heightController.text);
-                        Kyouyuu.instance.nowWeight =
-                            double.parse(weightController.text);
-                        setState(() {
-                          Kyouyuu.instance.ideal = double.parse(
-                              (Kyouyuu.instance.nowWeight! -
-                                      (Kyouyuu.instance.nowWeight! * 0.02 * 6))
-                                  .toStringAsFixed(1));
-                        });
+                      if (SharedValues.instance._formKey.currentState!
+                          .validate()) {
+                        idealMath();
                       }
                     },
                     child: Text('決定'),
@@ -200,17 +192,11 @@ class _MyHomePage extends State<MyHomePage> {
                     ),
                     onPressed: () {
                       ///idealがnullだったらelse文使ってスナックバー表示こっち！！
-                      setState(() {
-                        Kyouyuu.instance.nowWeight =
-                            double.parse(weightController.text);
-                        Kyouyuu.instance.ideal = double.parse(
-                            (Kyouyuu.instance.nowWeight! -
-                                    (Kyouyuu.instance.nowWeight! * 0.02 * 6))
-                                .toStringAsFixed(1));
+                      idealMath();
 
-                        Kyouyuu.instance.firstDay = formatter.parse(fDate!);
-                      });
-                      if (Kyouyuu.instance.ideal != null)
+                      SharedValues.instance.firstDay = formatter.parse(fDate!);
+
+                      if (SharedValues.instance.ideal != null)
                         Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -220,11 +206,11 @@ class _MyHomePage extends State<MyHomePage> {
                   ),
                 ),
               ]),
-              if (Kyouyuu.instance.ideal != null)
+              if (SharedValues.instance.ideal != null)
                 Container(
                     alignment: Alignment.center,
                     child: Text(
-                      'あなたの目標体重は${Kyouyuu.instance.ideal}です',
+                      'あなたの目標体重は${SharedValues.instance.ideal}です',
                       style: TextStyle(
                           decoration: TextDecoration.underline,
                           fontWeight: FontWeight.bold,
@@ -261,5 +247,16 @@ class _MyHomePage extends State<MyHomePage> {
     if (picked != null) {
       setState(() => formatter.parse(fDate!) != picked);
     }
+  }
+
+  Future idealMath() async {
+    nowHeight = double.parse(heightController.text);
+    SharedValues.instance.nowWeight = double.parse(weightController.text);
+    setState(() {
+      SharedValues.instance.ideal = double.parse(
+          (SharedValues.instance.nowWeight! -
+                  (SharedValues.instance.nowWeight! * 0.02 * 6))
+              .toStringAsFixed(1));
+    });
   }
 }

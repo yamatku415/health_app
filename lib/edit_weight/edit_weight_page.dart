@@ -54,7 +54,7 @@ class _EditWeightPageState extends State<EditWeightPage> {
                       children: <Widget>[
                         Center(
                             child: Text(
-                          'あなたの目標体重は${Kyouyuu.instance.ideal}です',
+                          'あなたの目標体重は${SharedValues.instance.ideal}です',
                           style: TextStyle(
                               decoration: TextDecoration.underline,
                               fontWeight: FontWeight.bold,
