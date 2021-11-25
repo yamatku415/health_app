@@ -57,7 +57,7 @@ class _AddWeightPage extends State<AddWeightPage> {
                                 children: <Widget>[
                                   Center(
                                       child: Text(
-                                          "${DateFormat('MM/dd/yyyy').format(_date)}")),
+                                          "${DateFormat('yyyy/MM/dd').format(_date)}")),
                                   ElevatedButton(
                                     onPressed: () => _selectDate(context),
                                     child: Text('日付選択'),
@@ -69,7 +69,7 @@ class _AddWeightPage extends State<AddWeightPage> {
                               //処理
                               try {
                                 String date =
-                                    DateFormat('MM/dd/yyyy').format(_date);
+                                    DateFormat('yyyy/MM/dd').format(_date);
                                 model.date = date;
                                 await model.addWeight();
                                 //todo

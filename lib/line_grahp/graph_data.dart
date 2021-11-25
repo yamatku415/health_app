@@ -12,7 +12,7 @@ class GraphData extends ChangeNotifier {
       .snapshots();
   List<WeightDataGraph>? today;
   DateTime dateTime = DateTime.now();
-  static final _dateFormatter = DateFormat("MM/dd/yyyy");
+  static final _dateFormatter = DateFormat("yyyy/MM/dd");
 
   void fetchWeightGraph() {
     _usersStream.listen((QuerySnapshot snapshot) {

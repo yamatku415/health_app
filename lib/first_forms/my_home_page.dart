@@ -45,6 +45,13 @@ class _MyHomePage extends State<MyHomePage> {
     setState(() {});
   }
 
+  Future<void> delDate() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    prefs.remove('date');
+    setState(() {});
+  }
+
   @override
   void initState() {
     super.initState();
@@ -118,7 +125,7 @@ class _MyHomePage extends State<MyHomePage> {
                         onPressed: () {
                           if (fDate == null) {
                             _selectDate(context);
-                            fDate = DateFormat('MM/dd/yyyy').format(_date);
+                            fDate = DateFormat('yyyy/MM/dd').format(_date);
                           } else {
                             _selectedDate(context);
                             SharedValues.instance.firstDay =
@@ -237,7 +244,7 @@ class _MyHomePage extends State<MyHomePage> {
     }
   }
 
-  static final formatter = DateFormat("MM/dd/yyyy");
+  static final formatter = DateFormat("yyyy/MM/dd");
   Future<Null> _selectedDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
         context: context,

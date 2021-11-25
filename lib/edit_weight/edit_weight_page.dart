@@ -21,15 +21,7 @@ class _EditWeightPageState extends State<EditWeightPage> {
     return ChangeNotifierProvider<EditWeightModel>(
       create: (_) => EditWeightModel(widget.weightData),
       child: Scaffold(
-        appBar: AppBar(
-          leading: FloatingActionButton(
-            child: Text('戻る'),
-            onPressed: () {
-              // 1つ前に戻る
-              Navigator.pop(context);
-            },
-          ),
-        ),
+        appBar: AppBar(),
         body: Center(
           child: Consumer<EditWeightModel>(builder: (context, model, child) {
             return Padding(
@@ -67,7 +59,7 @@ class _EditWeightPageState extends State<EditWeightPage> {
                               children: <Widget>[
                                 Center(
                                     child: Text(
-                                        "${DateFormat('MM/dd/yyyy').format(_date)}")),
+                                        "${DateFormat('yyyy/MM/dd').format(_date)}")),
                                 ElevatedButton(
                                   onPressed: () => _edSelectDate(context),
                                   child: Text('日付選択'),
@@ -79,7 +71,7 @@ class _EditWeightPageState extends State<EditWeightPage> {
                             //処理
                             try {
                               String date =
-                                  DateFormat('MM/dd/yyyy').format(_date);
+                                  DateFormat('yyyy/MM/dd').format(_date);
                               await model.update(
                                   model.weightController.text, date);
                               final snackBar = SnackBar(
@@ -108,7 +100,9 @@ class _EditWeightPageState extends State<EditWeightPage> {
     );
   }
 
+  //ここで_dateにsetToDte(String date)のdateを渡したい
   DateTime _date = DateTime.now();
+
   Future<Null> _edSelectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
         context: context,

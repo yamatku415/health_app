@@ -15,8 +15,6 @@ class LoginModel with ChangeNotifier {
 
 //ログインした上でログインしたユーザーデータを作る
   Future<void> login() async {
-    //動画
-    // 49:20エラーインポートのところ　おそらくpageの所でコードが違うのかも知れない
     final res = await signInWithGoogle();
     if (res) {
       //登録したユーザーデータが見れる

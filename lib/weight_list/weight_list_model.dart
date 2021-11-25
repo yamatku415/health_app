@@ -33,6 +33,8 @@ class WeightListModel extends ChangeNotifier {
 
   Future delete(WeightData weightData) {
     return FirebaseFirestore.instance
+        .collection('users')
+        .doc(uid)
         .collection('today')
         .doc(weightData.id)
         .delete();
