@@ -57,11 +57,23 @@ class _EditWeightPageState extends State<EditWeightPage> {
                             padding: const EdgeInsets.all(50.0),
                             child: Column(
                               children: <Widget>[
-                                Center(
-                                    child: Text(
-                                        "${DateFormat('yyyy/MM/dd').format(_date)}")),
+                                Center(child: Text(model.date!)),
                                 ElevatedButton(
-                                  onPressed: () => _edSelectDate(context),
+                                  onPressed: () async {
+                                    final DateTime? picked =
+                                        await showDatePicker(
+                                            context: context,
+                                            initialDate:
+                                                DateTime.parse(model.date!),
+                                            firstDate: DateTime(2018),
+                                            lastDate: DateTime.now()
+                                                .add(Duration(days: 360)));
+                                    if (picked != null) {
+                                      setState(() => model.date =
+                                          DateFormat('yyyy/MM/dd')
+                                              .format(picked));
+                                    }
+                                  },
                                   child: Text('日付選択'),
                                 )
                               ],
@@ -70,8 +82,7 @@ class _EditWeightPageState extends State<EditWeightPage> {
                           onPressed: () async {
                             //処理
                             try {
-                              String date =
-                                  DateFormat('yyyy/MM/dd').format(_date);
+                              String date = model.date!;
                               await model.update(
                                   model.weightController.text, date);
                               final snackBar = SnackBar(
@@ -101,16 +112,5 @@ class _EditWeightPageState extends State<EditWeightPage> {
   }
 
   //ここで_dateにsetToDte(String date)のdateを渡したい
-  DateTime _date = DateTime.now();
 
-  Future<Null> _edSelectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-        context: context,
-        initialDate: _date,
-        firstDate: DateTime(2018),
-        lastDate: DateTime.now().add(Duration(days: 360)));
-    if (picked != null) {
-      setState(() => _date = picked);
-    }
-  }
 }

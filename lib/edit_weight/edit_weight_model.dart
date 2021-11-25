@@ -8,6 +8,7 @@ class EditWeightModel extends ChangeNotifier {
   WeightData weightData;
   EditWeightModel(this.weightData) {
     weightController.text = weightData.weight;
+    date = weightData.date;
   }
 
   final weightController = TextEditingController();
