@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:health_app/first_forms/my_home_page.dart';
 import 'package:health_app/first_forms/weight_data.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import 'edit_weight_model.dart';
@@ -21,7 +20,9 @@ class _EditWeightPageState extends State<EditWeightPage> {
     return ChangeNotifierProvider<EditWeightModel>(
       create: (_) => EditWeightModel(widget.weightData),
       child: Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+          title: Text('体重と日付の変更'),
+        ),
         body: Center(
           child: Consumer<EditWeightModel>(builder: (context, model, child) {
             return Padding(
@@ -59,20 +60,12 @@ class _EditWeightPageState extends State<EditWeightPage> {
                               children: <Widget>[
                                 Center(child: Text(model.date!)),
                                 ElevatedButton(
-                                  onPressed: () async {
-                                    final DateTime? picked =
-                                        await showDatePicker(
-                                            context: context,
-                                            initialDate:
-                                                DateTime.parse(model.date!),
-                                            firstDate: DateTime(2018),
-                                            lastDate: DateTime.now()
-                                                .add(Duration(days: 360)));
-                                    if (picked != null) {
-                                      setState(() => model.date =
-                                          DateFormat('yyyy/MM/dd')
-                                              .format(picked));
-                                    }
+                                  onPressed: () {
+                                    _edSelectDate(context);
+
+                                    //変更する日付(modelでっと来ているから)は変更されているが、
+                                    // 値を変更されたあとに変更されいないので、ifを使ってみる
+                                    //カレンダーについて調べる。
                                   },
                                   child: Text('日付選択'),
                                 )
@@ -113,4 +106,15 @@ class _EditWeightPageState extends State<EditWeightPage> {
 
   //ここで_dateにsetToDte(String date)のdateを渡したい
 
+  DateTime _date = DateTime.now();
+  Future<Null> _edSelectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: _date,
+        firstDate: DateTime(2018),
+        lastDate: DateTime.now().add(Duration(days: 360)));
+    if (picked != null) {
+      setState(() => _date != picked);
+    }
+  }
 }

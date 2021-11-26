@@ -13,6 +13,7 @@ class SharedValues {
   double? nowWeight;
   double? ideal;
   DateTime? firstDay;
+  String? edDay;
 
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 }

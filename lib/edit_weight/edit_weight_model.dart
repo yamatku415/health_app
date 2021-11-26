@@ -23,6 +23,7 @@ class EditWeightModel extends ChangeNotifier {
 
   void setToDate(String date) {
     this.date = date;
+
     notifyListeners();
   }
 

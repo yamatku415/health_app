@@ -14,6 +14,51 @@
       },
       "oauth_client": [
         {
+          "client_id": "991895316739-8es7arfd7kdj548c7gu6o78hbic7r5q5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.health_app",
+            "certificate_hash": "60ab2c37821030ac382a3b8850cecfe27a73039b"
+          }
+        },
+        {
+          "client_id": "991895316739-qod8p54lh036a1i8eajnv330iu8s4usi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAh1HiOQqfsA-ZDdwl_Kp-jHrxqiI-6giQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "991895316739-qod8p54lh036a1i8eajnv330iu8s4usi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:991895316739:android:0ec71e14f86404560e6136",
+        "android_client_info": {
+          "package_name": "com.uemura.health_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "991895316739-9a7rm4lh4toa759r9rnp3019ku1quioj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.uemura.health_app",
+            "certificate_hash": "60ab2c37821030ac382a3b8850cecfe27a73039b"
+          }
+        },
+        {
           "client_id": "991895316739-qod8p54lh036a1i8eajnv330iu8s4usi.apps.googleusercontent.com",
           "client_type": 3
         }
