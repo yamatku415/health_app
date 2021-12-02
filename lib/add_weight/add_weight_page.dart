@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:health_app/first_forms/my_home_page.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -42,15 +41,6 @@ class _AddWeightPage extends State<AddWeightPage> {
                       padding: const EdgeInsets.all(50.0),
                       child: Column(
                         children: <Widget>[
-                          Center(
-                              child: Text(
-                            'あなたの目標体重は${SharedValues.instance.ideal}です',
-                            style: TextStyle(
-                                decoration: TextDecoration.underline,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.green,
-                                fontStyle: FontStyle.italic),
-                          )),
                           Container(
                               padding: const EdgeInsets.all(50.0),
                               child: Column(

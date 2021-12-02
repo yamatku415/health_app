@@ -14,6 +14,7 @@ class SharedValues {
   double? ideal;
   DateTime? firstDay;
   String? edDay;
+  DateTime? edDate;
 
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 }

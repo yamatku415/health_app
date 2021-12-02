@@ -24,7 +24,7 @@ class WeightListModel extends ChangeNotifier {
         //ここの文はWeightDataにリターンしてるということはWeightDataの方にデータが移っているのか？
         return WeightData(id, date, weight);
       }).toList();
-      today.sort((a, b) => a.date.compareTo(b.date));
+      today.sort((a, b) => -a.date.compareTo(b.date));
       this.today = today;
 
       notifyListeners();

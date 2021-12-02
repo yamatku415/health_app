@@ -89,7 +89,6 @@ class _WeightListPageState extends State<WeightListPage> {
           return FloatingActionButton(
               child: Icon(Icons.add),
               onPressed: () async {
-                // 画面遷移
                 final bool? added = await Navigator.push(
                   context,
                   MaterialPageRoute(

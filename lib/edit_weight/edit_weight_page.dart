@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:health_app/first_forms/my_home_page.dart';
 import 'package:health_app/first_forms/weight_data.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import 'edit_weight_model.dart';
@@ -45,20 +45,13 @@ class _EditWeightPageState extends State<EditWeightPage> {
                     padding: const EdgeInsets.all(50.0),
                     child: Column(
                       children: <Widget>[
-                        Center(
-                            child: Text(
-                          'あなたの目標体重は${SharedValues.instance.ideal}です',
-                          style: TextStyle(
-                              decoration: TextDecoration.underline,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.green,
-                              fontStyle: FontStyle.italic),
-                        )),
                         Container(
                             padding: const EdgeInsets.all(50.0),
                             child: Column(
                               children: <Widget>[
-                                Center(child: Text(model.date!)),
+                                Center(
+                                    child: Text(
+                                        "${DateFormat('yyyy/MM/dd').format(_date)}")),
                                 ElevatedButton(
                                   onPressed: () {
                                     _edSelectDate(context);
@@ -75,7 +68,8 @@ class _EditWeightPageState extends State<EditWeightPage> {
                           onPressed: () async {
                             //処理
                             try {
-                              String date = model.date!;
+                              String date =
+                                  DateFormat('yyyy/MM/dd').format(_date);
                               await model.update(
                                   model.weightController.text, date);
                               final snackBar = SnackBar(
