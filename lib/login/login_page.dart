@@ -9,6 +9,8 @@ import 'package:provider/provider.dart';
 import 'package:sign_button/constants.dart';
 import 'package:sign_button/create_button.dart';
 
+import '../back_ground.dart';
+
 class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -16,48 +18,51 @@ class LoginPage extends StatelessWidget {
       create: (context) => LoginModel(),
       child: Consumer<LoginModel>(builder: (context, model, child) {
         return Scaffold(
-          appBar: AppBar(
-            title: Text(
-              'ログイン',
+            appBar: AppBar(
+              automaticallyImplyLeading: false,
+              title: Text(
+                'ログイン',
+              ),
             ),
-          ),
-          body: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(FirebaseAuth.instance.currentUser?.displayName ??
-                    'ログインしていません'),
-                const SizedBox(
-                  height: 24,
-                ),
-                SignInButton(
-                    buttonType: ButtonType.google,
-                    onPressed: () async {
-                      await model.login();
-                      Navigator.of(context)
-                          .push(MaterialPageRoute(builder: (context) {
-                        return MyHomePage();
-                      }));
-                    }),
-                const SizedBox(
-                  height: 24,
-                ),
-                if (FirebaseAuth.instance.currentUser != null)
-                  SizedBox(
-                    height: 48,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        model.logout();
-                      },
-                      child: const Text('ログアウト'),
+            body: Stack(children: [
+              AppBackground(),
+              Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(FirebaseAuth.instance.currentUser?.displayName ??
+                        'ログインしていません'),
+                    const SizedBox(
+                      height: 24,
                     ),
-                  )
-                else
-                  const SizedBox(height: 48)
-              ],
-            ),
-          ),
-        );
+                    SignInButton(
+                        buttonType: ButtonType.google,
+                        onPressed: () async {
+                          await model.login();
+                          Navigator.of(context)
+                              .push(MaterialPageRoute(builder: (context) {
+                            return MyHomePage();
+                          }));
+                        }),
+                    const SizedBox(
+                      height: 24,
+                    ),
+                    if (FirebaseAuth.instance.currentUser != null)
+                      SizedBox(
+                        height: 48,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            model.logout();
+                          },
+                          child: const Text('ログアウト'),
+                        ),
+                      )
+                    else
+                      const SizedBox(height: 48)
+                  ],
+                ),
+              ),
+            ]));
       }),
     );
   }

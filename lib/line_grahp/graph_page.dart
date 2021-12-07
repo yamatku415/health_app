@@ -4,6 +4,7 @@ import 'package:health_app/first_forms/my_home_page.dart';
 import 'package:health_app/first_forms/weight_data.dart';
 import 'package:provider/provider.dart';
 
+import '../back_ground.dart';
 import 'graph_data.dart';
 
 class GraphPage extends StatefulWidget {
@@ -17,20 +18,25 @@ class _GraphPage extends State<GraphPage> {
     return ChangeNotifierProvider<GraphData>(
       create: (_) => GraphData()..fetchWeightGraph(),
       child: Scaffold(
-        appBar: AppBar(
-          title: Text("体重グラフ"),
-        ),
-        body: Consumer<GraphData>(builder: (context, model, child) {
-          final List<WeightDataGraph>? today = model.today;
-          if (today == null) {
-            return CircularProgressIndicator();
-          }
+          appBar: AppBar(
+            title: Text("体重グラフ"),
+          ),
+          body: Stack(children: [
+            AppBackground(),
+            Consumer<GraphData>(builder: (context, model, child) {
+              final List<WeightDataGraph>? today = model.today;
+              if (today == null) {
+                return CircularProgressIndicator();
+              }
 
-          return Column(children: [
-            Container(height: 600, child: _simpleLine(today)),
-          ]);
-        }),
-      ),
+              return InteractiveViewer(
+                boundaryMargin: const EdgeInsets.all(20.0),
+                minScale: 0.1,
+                maxScale: 1.6,
+                child: Container(height: 500, child: _simpleLine(today)),
+              );
+            }),
+          ])),
     );
   }
 
