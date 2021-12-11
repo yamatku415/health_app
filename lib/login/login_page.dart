@@ -41,7 +41,7 @@ class LoginPage extends StatelessWidget {
                           await model.login();
                           Navigator.of(context)
                               .push(MaterialPageRoute(builder: (context) {
-                            return MyHomePage();
+                            return BottomNavigation();
                           }));
                         }),
                     const SizedBox(

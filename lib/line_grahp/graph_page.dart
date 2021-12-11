@@ -19,22 +19,22 @@ class _GraphPage extends State<GraphPage> {
       create: (_) => GraphData()..fetchWeightGraph(),
       child: Scaffold(
           appBar: AppBar(
-            title: Text("体重グラフ"),
+            title: Text("あなたの体重グラフ"),
           ),
           body: Stack(children: [
             AppBackground(),
             Consumer<GraphData>(builder: (context, model, child) {
               final List<WeightDataGraph>? today = model.today;
-              if (today == null) {
+              if (today == null || SharedValues.instance.ideal == null) {
                 return CircularProgressIndicator();
+              } else {
+                return InteractiveViewer(
+                  boundaryMargin: const EdgeInsets.all(20.0),
+                  minScale: 0.1,
+                  maxScale: 1.6,
+                  child: Container(height: 500, child: _simpleLine(today)),
+                );
               }
-
-              return InteractiveViewer(
-                boundaryMargin: const EdgeInsets.all(20.0),
-                minScale: 0.1,
-                maxScale: 1.6,
-                child: Container(height: 500, child: _simpleLine(today)),
-              );
             }),
           ])),
     );
@@ -76,12 +76,44 @@ class LinearSales {
   static List<LinearSales> weightIdealGraph() {
     final linearSalesList = <LinearSales>[];
     double a =
-        (SharedValues.instance.nowWeight! - SharedValues.instance.ideal!) /
-            180; //計算式（1日あたりの減らすべき体重）
+        (SharedValues.instance.nowWeight! - SharedValues.instance.ideal!) / 360;
+    double b = a * 3;
+
+    //計算式（1日あたりの減らすべき体重）
+
     double reWeight = SharedValues.instance.nowWeight!;
 
-    for (int days = 0; days != 180; days++) {
+    for (int days = 0; days != 45; days++) {
       reWeight -= a;
+      //reWeightではなく違う変数で三段階の計算を出した後に代入すれえば形になるのではないか
+
+      linearSalesList.add(LinearSales(days, reWeight));
+      if (reWeight <= SharedValues.instance.ideal!) {
+        break;
+      }
+    }
+    for (int days = 46; days != 90; days++) {
+      reWeight -= b;
+      //reWeightではなく違う変数で三段階の計算を出した後に代入すれえば形になるのではないか
+
+      linearSalesList.add(LinearSales(days, reWeight));
+      if (reWeight <= SharedValues.instance.ideal!) {
+        break;
+      }
+    }
+    for (int days = 91; days != 135; days++) {
+      reWeight -= a;
+      //reWeightではなく違う変数で三段階の計算を出した後に代入すれえば形になるのではないか
+
+      linearSalesList.add(LinearSales(days, reWeight));
+      if (reWeight <= SharedValues.instance.ideal!) {
+        break;
+      }
+    }
+    for (int days = 136; days != 180; days++) {
+      reWeight -= b;
+      //reWeightではなく違う変数で三段階の計算を出した後に代入すれえば形になるのではないか
+
       linearSalesList.add(LinearSales(days, reWeight));
       if (reWeight <= SharedValues.instance.ideal!) {
         break;

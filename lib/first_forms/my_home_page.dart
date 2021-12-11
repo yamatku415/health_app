@@ -21,6 +21,44 @@ class SharedValues {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 }
 
+class BottomNavigation extends StatefulWidget {
+  @override
+  _BottomNavigationState createState() => _BottomNavigationState();
+}
+
+class _BottomNavigationState extends State<BottomNavigation> {
+  int selectedIndex = 0;
+  List<Widget> pageList = [
+    MyHomePage(),
+    AddWeightPage(),
+    WeightListPage(),
+    GraphPage()
+  ];
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: pageList[selectedIndex],
+      bottomNavigationBar: BottomNavigationBar(
+          items: [
+            BottomNavigationBarItem(
+                icon: Icon(Icons.home),
+                label: 'ホーム',
+                backgroundColor: Colors.green),
+            BottomNavigationBarItem(icon: Icon(Icons.add), label: '今日の体重'),
+            BottomNavigationBarItem(icon: Icon(Icons.list), label: '体重リスト'),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.stacked_line_chart), label: '体重グラフ'),
+          ],
+          currentIndex: selectedIndex,
+          onTap: (int index) {
+            setState(() {
+              selectedIndex = index;
+            });
+          }),
+    );
+  }
+}
+
 class MyHomePage extends StatefulWidget {
   @override
   _MyHomePage createState() => _MyHomePage();
@@ -46,6 +84,10 @@ class _MyHomePage extends State<MyHomePage> {
     weightController.text = prefs.getString('weight') ?? "";
     fDate = prefs.getString('date');
     SharedValues.instance.ideal = prefs.getDouble('ideal');
+    idealMath();
+
+    SharedValues.instance.firstDay = formatter.parse(fDate!);
+
     setState(() {});
   }
 
@@ -131,10 +173,6 @@ class _MyHomePage extends State<MyHomePage> {
                             onPressed: () {
                               if (fDate == null) {
                                 _selectDate(context);
-                              } else {
-                                _selectedDate(context);
-                                SharedValues.instance.firstDay =
-                                    formatter.parse(fDate!);
                               }
                             },
                             child: Text('日付選択'),
@@ -154,87 +192,34 @@ class _MyHomePage extends State<MyHomePage> {
                               .validate()) {
                             idealMath();
                             fDate = DateFormat('yyyy/MM/dd').format(_date);
+                            idealMath();
+
+                            SharedValues.instance.firstDay =
+                                formatter.parse(fDate!);
                           }
                         },
                         child: Text('決定'),
                       ),
                     ),
                   ),
-                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: RaisedButton(
-                          child: Text('今日の体重記入'),
-                          color: Color(0xFFDAE5D2),
-                          shape: const StadiumBorder(
-                            side: BorderSide(color: Color(0xFF468B08)),
-                          ),
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => AddWeightPage(),
-                                ));
-                          }),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: RaisedButton(
-                          child: Text('体重リスト'),
-                          color: Color(0xFFDAE5D2),
-                          shape: const StadiumBorder(
-                            side: BorderSide(color: Color(0xFF254E00)),
-                          ),
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => WeightListPage(),
-                                ));
-                          }),
-                    ),
-
-                    ///値が入っていない場合は何かしらでページ遷移できないようにする
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: RaisedButton(
-                        child: Text('グラフ'),
-                        color: Color(0xFFDAE5D2),
-                        shape: const StadiumBorder(
-                          side: BorderSide(color: Color(0xFF254E00)),
-                        ),
-                        onPressed: () {
-                          ///idealがnullだったらelse文使ってスナックバー表示こっち！！
-                          idealMath();
-
-                          SharedValues.instance.firstDay =
-                              formatter.parse(fDate!);
-
-                          if (SharedValues.instance.ideal != null)
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => GraphPage(),
-                                ));
-                        },
-                      ),
-                    ),
-                  ]),
                   if (SharedValues.instance.ideal != null)
-                    Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: Colors.green),
-                        ),
-                        alignment: Alignment.center,
-                        child: Text(
-                          'あなたの目標体重は${SharedValues.instance.ideal}kgです',
-                          style: TextStyle(
-                              decoration: TextDecoration.underline,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.green,
-                              fontStyle: FontStyle.italic),
-                        )),
+                    Padding(
+                      padding: const EdgeInsets.all(50.0),
+                      child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(color: Colors.green),
+                          ),
+                          alignment: Alignment.center,
+                          child: Text(
+                            'あなたの目標体重は${SharedValues.instance.ideal}kgです',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.green,
+                                fontStyle: FontStyle.italic,
+                                fontSize: 19),
+                          )),
+                    ),
                 ],
               ),
             ),
@@ -256,16 +241,6 @@ class _MyHomePage extends State<MyHomePage> {
   }
 
   static final formatter = DateFormat("yyyy/MM/dd");
-  Future<Null> _selectedDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-        context: context,
-        initialDate: formatter.parse(fDate!),
-        firstDate: DateTime(2018),
-        lastDate: DateTime.now().add(Duration(days: 360)));
-    if (picked != null) {
-      setState(() => formatter.parse(fDate!) != picked);
-    }
-  }
 
   Future idealMath() async {
     nowHeight = double.parse(heightController.text);

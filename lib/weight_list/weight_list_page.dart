@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:health_app/add_weight/add_weight_page.dart';
 import 'package:health_app/edit_weight/edit_weight_page.dart';
 import 'package:health_app/first_forms/weight_data.dart';
 import 'package:health_app/weight_list/weight_list_model.dart';
@@ -89,30 +88,6 @@ class _WeightListPageState extends State<WeightListPage> {
             }),
           ),
         ]),
-        floatingActionButton:
-            Consumer<WeightListModel>(builder: (context, model, child) {
-          return FloatingActionButton(
-              child: Icon(Icons.add),
-              onPressed: () async {
-                final bool? added = await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => AddWeightPage(),
-                    fullscreenDialog: true,
-                  ),
-                );
-
-                if (added != null && added) {
-                  final snackBar = SnackBar(
-                    backgroundColor: Colors.green,
-                    content: Text('体重を追加しました'),
-                  );
-                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                }
-
-                model.fetchWeightList();
-              });
-        }),
       ),
     );
   }
