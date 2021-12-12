@@ -19,22 +19,22 @@ class _GraphPage extends State<GraphPage> {
       create: (_) => GraphData()..fetchWeightGraph(),
       child: Scaffold(
           appBar: AppBar(
-            title: Text("あなたの体重グラフ"),
+            title: Text("体重グラフ"),
           ),
           body: Stack(children: [
             AppBackground(),
             Consumer<GraphData>(builder: (context, model, child) {
               final List<WeightDataGraph>? today = model.today;
-              if (today == null || SharedValues.instance.ideal == null) {
+              if (today == null) {
                 return CircularProgressIndicator();
-              } else {
-                return InteractiveViewer(
-                  boundaryMargin: const EdgeInsets.all(20.0),
-                  minScale: 0.1,
-                  maxScale: 1.6,
-                  child: Container(height: 500, child: _simpleLine(today)),
-                );
               }
+
+              return InteractiveViewer(
+                boundaryMargin: const EdgeInsets.all(20.0),
+                minScale: 0.1,
+                maxScale: 1.6,
+                child: Container(height: 500, child: _simpleLine(today)),
+              );
             }),
           ])),
     );

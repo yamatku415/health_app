@@ -65,6 +65,7 @@ class _MyHomePage extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           leading: IconButton(
             icon: Icon(Icons.logout),
@@ -298,11 +299,11 @@ class _MyHomePage extends State<MyHomePage> {
   Future idealMath() async {
     nowHeight = double.parse(heightController.text);
     SharedValues.instance.nowWeight = double.parse(weightController.text);
-    setState(() {
-      SharedValues.instance.ideal = double.parse(
-          (SharedValues.instance.nowWeight! -
-                  (SharedValues.instance.nowWeight! * 0.02 * 6))
-              .toStringAsFixed(1));
-    });
+
+    SharedValues.instance.ideal = double.parse(
+        (SharedValues.instance.nowWeight! -
+                (SharedValues.instance.nowWeight! * 0.02 * 6))
+            .toStringAsFixed(1));
+    setState(() {});
   }
 }
