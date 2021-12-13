@@ -19,6 +19,7 @@ class _GraphPage extends State<GraphPage> {
       create: (_) => GraphData()..fetchWeightGraph(),
       child: Scaffold(
           appBar: AppBar(
+            automaticallyImplyLeading: false,
             title: Text("体重グラフ"),
           ),
           body: Stack(children: [

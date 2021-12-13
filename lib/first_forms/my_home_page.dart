@@ -21,6 +21,59 @@ class SharedValues {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 }
 
+class BottomNavigation extends StatefulWidget {
+  @override
+  _BottomNavigationState createState() => _BottomNavigationState();
+}
+
+class _BottomNavigationState extends State<BottomNavigation> {
+  int selectedIndex = 0;
+  List<Widget> pageList = [
+    MyHomePage(),
+    AddWeightPage(),
+    WeightListPage(),
+    GraphPage()
+  ];
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: pageList[selectedIndex],
+      bottomNavigationBar: BottomNavigationBar(
+          items: [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: 'ホーム',
+              backgroundColor: Colors.green,
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.add),
+              label: '今日の体重',
+              backgroundColor: Colors.green,
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.list),
+              label: '体重リスト',
+              backgroundColor: Colors.green,
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.stacked_line_chart),
+              label: '体重グラフ',
+              backgroundColor: Colors.green,
+            ),
+          ],
+          currentIndex: selectedIndex,
+          type: BottomNavigationBarType.shifting,
+          unselectedItemColor: Colors.white,
+          selectedItemColor: Colors.white,
+          onTap: (int index) {
+            setState(() {
+              selectedIndex = index;
+            });
+          }),
+    );
+  }
+}
+
 class MyHomePage extends StatefulWidget {
   @override
   _MyHomePage createState() => _MyHomePage();
@@ -46,6 +99,10 @@ class _MyHomePage extends State<MyHomePage> {
     weightController.text = prefs.getString('weight') ?? "";
     fDate = prefs.getString('date');
     SharedValues.instance.ideal = prefs.getDouble('ideal');
+    idealMath();
+
+    SharedValues.instance.firstDay = formatter.parse(fDate!);
+
     setState(() {});
   }
 
@@ -65,8 +122,8 @@ class _MyHomePage extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        resizeToAvoidBottomInset: false,
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           leading: IconButton(
             icon: Icon(Icons.logout),
             onPressed: () {
@@ -132,43 +189,38 @@ class _MyHomePage extends State<MyHomePage> {
                             onPressed: () {
                               if (fDate == null) {
                                 _selectDate(context);
-                              } else {
-                                _selectedDate(context);
-                                SharedValues.instance.firstDay =
-                                    formatter.parse(fDate!);
                               }
                             },
                             child: Text('日付選択'),
                           )),
                         ],
                       )),
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Center(
-                        child: Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: ElevatedButton(
-                            // 送信ボタンクリック時の処理
-                            onPressed: () {
-                              // バリデーションチェック
-                              setData();
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(2.0),
+                      child: ElevatedButton(
+                        // 送信ボタンクリック時の処理
+                        onPressed: () {
+                          // バリデーションチェック
+                          setData();
 
-                              if (SharedValues.instance._formKey.currentState!
-                                  .validate()) {
-                                idealMath();
-                                fDate = DateFormat('yyyy/MM/dd').format(_date);
-                              }
-                            },
-                            child: Text('決定'),
-                          ),
-                        ),
+                          if (SharedValues.instance._formKey.currentState!
+                              .validate()) {
+                            idealMath();
+                            fDate = DateFormat('yyyy/MM/dd').format(_date);
+                            idealMath();
+
+                            SharedValues.instance.firstDay =
+                                formatter.parse(fDate!);
+                          }
+                        },
+                        child: Text('決定'),
                       ),
-                    ],
+                    ),
                   ),
                   if (SharedValues.instance.ideal != null)
                     Padding(
-                      padding: const EdgeInsets.all(40.0),
+                      padding: const EdgeInsets.all(50.0),
                       child: Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
@@ -184,86 +236,6 @@ class _MyHomePage extends State<MyHomePage> {
                                 fontSize: 19),
                           )),
                     ),
-                  Container(
-                    height: 200,
-                    child: Center(
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: ElevatedButton.icon(
-                                  label: Text(' 追加 '),
-                                  icon: Icon(Icons.add),
-                                  style: ElevatedButton.styleFrom(
-                                    primary: Colors.green,
-                                    onPrimary: Colors.white,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                  ),
-                                  onPressed: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => AddWeightPage(),
-                                        ));
-                                  }),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: ElevatedButton.icon(
-                                  label: Text('リスト'),
-                                  icon: Icon(Icons.list),
-                                  style: ElevatedButton.styleFrom(
-                                    primary: Colors.green,
-                                    onPrimary: Colors.white,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                  ),
-                                  onPressed: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              WeightListPage(),
-                                        ));
-                                  }),
-                            ),
-
-                            ///値が入っていない場合は何かしらでページ遷移できないようにする
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: ElevatedButton.icon(
-                                label: Text('グラフ'),
-                                icon: Icon(Icons.stacked_line_chart),
-                                style: ElevatedButton.styleFrom(
-                                  primary: Colors.green,
-                                  onPrimary: Colors.white,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                ),
-                                onPressed: () {
-                                  ///idealがnullだったらelse文使ってスナックバー表示こっち！！
-                                  idealMath();
-
-                                  SharedValues.instance.firstDay =
-                                      formatter.parse(fDate!);
-
-                                  if (SharedValues.instance.ideal != null)
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => GraphPage(),
-                                        ));
-                                },
-                              ),
-                            ),
-                          ]),
-                    ),
-                  ),
                 ],
               ),
             ),
@@ -285,25 +257,15 @@ class _MyHomePage extends State<MyHomePage> {
   }
 
   static final formatter = DateFormat("yyyy/MM/dd");
-  Future<Null> _selectedDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-        context: context,
-        initialDate: formatter.parse(fDate!),
-        firstDate: DateTime(2018),
-        lastDate: DateTime.now().add(Duration(days: 360)));
-    if (picked != null) {
-      setState(() => formatter.parse(fDate!) != picked);
-    }
-  }
 
   Future idealMath() async {
     nowHeight = double.parse(heightController.text);
     SharedValues.instance.nowWeight = double.parse(weightController.text);
-
-    SharedValues.instance.ideal = double.parse(
-        (SharedValues.instance.nowWeight! -
-                (SharedValues.instance.nowWeight! * 0.02 * 6))
-            .toStringAsFixed(1));
-    setState(() {});
+    setState(() {
+      SharedValues.instance.ideal = double.parse(
+          (SharedValues.instance.nowWeight! -
+                  (SharedValues.instance.nowWeight! * 0.02 * 6))
+              .toStringAsFixed(1));
+    });
   }
 }

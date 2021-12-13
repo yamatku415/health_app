@@ -18,6 +18,7 @@ class _AddWeightPage extends State<AddWeightPage> {
       create: (_) => AddWeightModel(),
       child: Scaffold(
           appBar: AppBar(
+            automaticallyImplyLeading: false,
             title: Text('今日の体重を追加'),
           ),
           body: Stack(children: [

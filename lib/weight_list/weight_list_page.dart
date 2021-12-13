@@ -19,7 +19,8 @@ class _WeightListPageState extends State<WeightListPage> {
       create: (_) => WeightListModel()..fetchWeightList(),
       child: Scaffold(
         appBar: AppBar(
-          title: Text('あなたの体重一覧'),
+          automaticallyImplyLeading: false,
+          title: Text('あなたの体重リスト'),
         ),
         body: Stack(children: [
           AppBackground(),
