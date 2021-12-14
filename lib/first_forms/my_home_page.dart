@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:health_app/add_weight/add_weight_page.dart';
 import 'package:health_app/line_grahp/graph_page.dart';
 import 'package:health_app/login/login_page.dart';
@@ -156,6 +157,9 @@ class _MyHomePage extends State<MyHomePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   TextFormField(
+                    inputFormatters: [
+                      FilteringTextInputFormatter.deny(RegExp(','))
+                    ],
                     controller: heightController,
                     textInputAction: TextInputAction.done,
                     keyboardType: TextInputType.number,
@@ -171,6 +175,9 @@ class _MyHomePage extends State<MyHomePage> {
                     },
                   ),
                   TextFormField(
+                    inputFormatters: [
+                      FilteringTextInputFormatter.deny(RegExp(','))
+                    ],
                     controller: weightController,
                     textInputAction: TextInputAction.done,
                     keyboardType: TextInputType.number,
@@ -259,6 +266,14 @@ class _MyHomePage extends State<MyHomePage> {
                                 fontSize: 19),
                           )),
                     ),
+                  Center(
+                    child: ElevatedButton(
+                      child: Text('del'),
+                      onPressed: () {
+                        allDel();
+                      },
+                    ),
+                  )
                 ],
               ),
             ),

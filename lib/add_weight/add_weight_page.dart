@@ -30,6 +30,9 @@ class _AddWeightPage extends State<AddWeightPage> {
                     child: Column(
                       children: [
                         TextFormField(
+                          inputFormatters: [
+                            FilteringTextInputFormatter.deny(RegExp(','))
+                          ],
                           textInputAction: TextInputAction.done,
                           keyboardType: TextInputType.number,
                           decoration: InputDecoration(

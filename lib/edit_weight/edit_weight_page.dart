@@ -33,6 +33,9 @@ class _EditWeightPageState extends State<EditWeightPage> {
                     padding: const EdgeInsets.all(8.0),
                     child: Column(children: [
                       TextFormField(
+                        inputFormatters: [
+                          FilteringTextInputFormatter.deny(RegExp(','))
+                        ],
                         controller: model.weightController,
                         textInputAction: TextInputAction.done,
                         keyboardType: TextInputType.number,
