@@ -13,12 +13,11 @@ class SharedValues {
   SharedValues._();
   static final instance = SharedValues._();
   double? nowWeight;
+  double? nowHeight;
   double? ideal;
   DateTime? firstDay;
   String? edDay;
   DateTime? edDate;
-
-  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 }
 
 class BottomNavigation extends StatefulWidget {
@@ -82,7 +81,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePage extends State<MyHomePage> {
   final heightController = TextEditingController();
   final weightController = TextEditingController();
-  double? nowHeight;
+
   String? fDate;
 
   Future<void> setData() async {
@@ -110,6 +109,15 @@ class _MyHomePage extends State<MyHomePage> {
     final prefs = await SharedPreferences.getInstance();
 
     prefs.remove('date');
+    setState(() {});
+  }
+
+  Future<void> allDel() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove('height');
+    prefs.remove('weight');
+    prefs.remove('date');
+    prefs.remove('ideal');
     setState(() {});
   }
 
@@ -144,7 +152,6 @@ class _MyHomePage extends State<MyHomePage> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Form(
-              key: SharedValues.instance._formKey, // 作成したフォームキーを指定
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
@@ -189,6 +196,11 @@ class _MyHomePage extends State<MyHomePage> {
                             onPressed: () {
                               if (fDate == null) {
                                 _selectDate(context);
+                                setState(() {});
+                              } else {
+                                delDate();
+                                _selectDate(context);
+                                setState(() {});
                               }
                             },
                             child: Text('日付選択'),
@@ -200,18 +212,29 @@ class _MyHomePage extends State<MyHomePage> {
                       padding: const EdgeInsets.all(2.0),
                       child: ElevatedButton(
                         // 送信ボタンクリック時の処理
-                        onPressed: () {
-                          // バリデーションチェック
-                          setData();
-
-                          if (SharedValues.instance._formKey.currentState!
-                              .validate()) {
-                            idealMath();
-                            fDate = DateFormat('yyyy/MM/dd').format(_date);
-                            idealMath();
+                        onPressed: () async {
+                          try {
+                            setData(); //SharedPreferencesへのset
+                            idealMath(); //idealの計算
 
                             SharedValues.instance.firstDay =
                                 formatter.parse(fDate!);
+
+                            await home();
+                            //todo
+                            final snackBar = SnackBar(
+                              backgroundColor: Colors.green,
+                              content: Text('登録しました'),
+                            );
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackBar);
+                          } catch (e) {
+                            final snackBar = SnackBar(
+                              backgroundColor: Colors.green,
+                              content: Text(e.toString()),
+                            );
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackBar);
                           }
                         },
                         child: Text('決定'),
@@ -239,7 +262,7 @@ class _MyHomePage extends State<MyHomePage> {
                 ],
               ),
             ),
-          ),
+          )
         ]));
   }
 
@@ -252,14 +275,19 @@ class _MyHomePage extends State<MyHomePage> {
         firstDate: DateTime(2018),
         lastDate: DateTime.now().add(Duration(days: 360)));
     if (picked != null) {
-      setState(() => _date = picked);
+      _date = picked;
+      setState(() {});
+      {
+        fDate = DateFormat('yyyy/MM/dd').format(picked);
+        setState(() {});
+      }
     }
   }
 
   static final formatter = DateFormat("yyyy/MM/dd");
 
   Future idealMath() async {
-    nowHeight = double.parse(heightController.text);
+    SharedValues.instance.nowHeight = double.parse(heightController.text);
     SharedValues.instance.nowWeight = double.parse(weightController.text);
     setState(() {
       SharedValues.instance.ideal = double.parse(
@@ -267,5 +295,16 @@ class _MyHomePage extends State<MyHomePage> {
                   (SharedValues.instance.nowWeight! * 0.02 * 6))
               .toStringAsFixed(1));
     });
+  }
+}
+
+Future home() async {
+  if (SharedValues.instance.nowHeight == null ||
+      SharedValues.instance.nowHeight.toString().isEmpty) {
+    throw '身長を入力してください';
+  }
+  if (SharedValues.instance.nowWeight == null ||
+      SharedValues.instance.nowWeight.toString().isEmpty) {
+    throw '体重を入力してください';
   }
 }

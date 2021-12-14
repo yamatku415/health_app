@@ -26,8 +26,35 @@ class _GraphPage extends State<GraphPage> {
             AppBackground(),
             Consumer<GraphData>(builder: (context, model, child) {
               final List<WeightDataGraph>? today = model.today;
+              if (SharedValues.instance.ideal == null) {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                      alignment: Alignment.center,
+                      child: Text(
+                        '現在の身長と体重を入力してください',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.green,
+                            fontStyle: FontStyle.italic,
+                            fontSize: 19),
+                      )),
+                );
+              }
               if (today == null) {
-                return CircularProgressIndicator();
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                      alignment: Alignment.center,
+                      child: Text(
+                        '今日の体重を入力してください',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.green,
+                            fontStyle: FontStyle.italic,
+                            fontSize: 19),
+                      )),
+                );
               }
 
               return InteractiveViewer(
