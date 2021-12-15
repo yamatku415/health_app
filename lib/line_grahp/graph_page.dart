@@ -41,28 +41,30 @@ class _GraphPage extends State<GraphPage> {
                       )),
                 );
               }
-              if (today == null) {
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                      alignment: Alignment.center,
-                      child: Text(
-                        '今日の体重を入力してください',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.green,
-                            fontStyle: FontStyle.italic,
-                            fontSize: 19),
-                      )),
-                );
+              {
+                if (today == null) {
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                        alignment: Alignment.center,
+                        child: Text(
+                          '今日の体重を入力してください',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.green,
+                              fontStyle: FontStyle.italic,
+                              fontSize: 19),
+                        )),
+                  );
+                } else {
+                  return InteractiveViewer(
+                    boundaryMargin: const EdgeInsets.all(20.0),
+                    minScale: 0.1,
+                    maxScale: 1.6,
+                    child: Container(height: 500, child: _simpleLine(today)),
+                  );
+                }
               }
-
-              return InteractiveViewer(
-                boundaryMargin: const EdgeInsets.all(20.0),
-                minScale: 0.1,
-                maxScale: 1.6,
-                child: Container(height: 500, child: _simpleLine(today)),
-              );
             }),
           ])),
     );
