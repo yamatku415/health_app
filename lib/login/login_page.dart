@@ -38,11 +38,15 @@ class LoginPage extends StatelessWidget {
                     SignInButton(
                         buttonType: ButtonType.google,
                         onPressed: () async {
-                          await model.login();
-                          Navigator.of(context)
-                              .push(MaterialPageRoute(builder: (context) {
-                            return BottomNavigation();
-                          }));
+                          try {
+                            final result = await model.login();
+                            if (result) {
+                              Navigator.of(context)
+                                  .push(MaterialPageRoute(builder: (context) {
+                                return BottomNavigation();
+                              }));
+                            }
+                          } catch (e) {}
                         }),
                     const SizedBox(
                       height: 24,

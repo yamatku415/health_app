@@ -14,14 +14,14 @@ class LoginModel with ChangeNotifier {
   }
 
 //ログインした上でログインしたユーザーデータを作る
-  Future<void> login() async {
+  Future<bool> login() async {
     final res = await signInWithGoogle();
     if (res) {
       //登録したユーザーデータが見れる
       final user = FirebaseAuth.instance.currentUser;
 
       if (user == null) {
-        return;
+        return true;
       }
       await FirebaseFirestore.instance
           .collection('users')
@@ -31,8 +31,10 @@ class LoginModel with ChangeNotifier {
         'imageUrl': user.photoURL,
         'email': user.email,
       });
+      return true;
     }
     notifyListeners();
+    return false;
   }
 
   //pageにも書いてあるから出来れば同じ、ものを使いまわしたい。

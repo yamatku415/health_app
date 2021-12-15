@@ -168,11 +168,6 @@ class _MyHomePage extends State<MyHomePage> {
                         icon: Icon(Icons.create),
                         hintText: '0.0cm',
                         labelText: '身長'),
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return '身長を入力してください';
-                      }
-                    },
                   ),
                   TextFormField(
                     inputFormatters: [
@@ -187,11 +182,6 @@ class _MyHomePage extends State<MyHomePage> {
                       hintText: '0.0kg',
                       labelText: '体重',
                     ),
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return '体重を入力してください';
-                      }
-                    },
                   ),
                   Container(
                       padding: const EdgeInsets.all(30.0),
@@ -221,13 +211,13 @@ class _MyHomePage extends State<MyHomePage> {
                         // 送信ボタンクリック時の処理
                         onPressed: () async {
                           try {
+                            await home();
                             setData(); //SharedPreferencesへのset
                             idealMath(); //idealの計算
 
                             SharedValues.instance.firstDay =
                                 formatter.parse(fDate!);
 
-                            await home();
                             //todo
                             final snackBar = SnackBar(
                               backgroundColor: Colors.green,
@@ -266,14 +256,6 @@ class _MyHomePage extends State<MyHomePage> {
                                 fontSize: 19),
                           )),
                     ),
-                  Center(
-                    child: ElevatedButton(
-                      child: Text('del'),
-                      onPressed: () {
-                        allDel();
-                      },
-                    ),
-                  )
                 ],
               ),
             ),
@@ -311,15 +293,16 @@ class _MyHomePage extends State<MyHomePage> {
               .toStringAsFixed(1));
     });
   }
-}
 
-Future home() async {
-  if (SharedValues.instance.nowHeight == null ||
-      SharedValues.instance.nowHeight.toString().isEmpty) {
-    throw '身長を入力してください';
-  }
-  if (SharedValues.instance.nowWeight == null ||
-      SharedValues.instance.nowWeight.toString().isEmpty) {
-    throw '体重を入力してください';
+  Future home() async {
+    if (heightController.text.isEmpty) {
+      throw '身長を入力してください';
+    }
+    if (weightController.text.isEmpty) {
+      throw '体重を入力してください';
+    }
+    if (fDate == null) {
+      throw '日付を選択してください';
+    }
   }
 }
